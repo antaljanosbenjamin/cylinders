@@ -9,11 +9,8 @@ Vector::Vector() {
     m_x = m_y = m_z = 0;
 }
 
-Vector::Vector( Number x0, Number y0, Number z0 ) {
-    m_x = x0;
-    m_y = y0;
-    m_z = z0;
-}
+Vector::Vector( Number x0, Number y0, Number z0 )
+        : m_x( x0 ), m_y( y0 ), m_z( z0 ) {};
 
 Vector Vector::operator*( const Number &a ) {
     return Vector( m_x * a, m_y * a, m_z * a );
@@ -58,14 +55,38 @@ Vector Vector::getNormalized() {
     return ( *this ) / this->length();
 };
 
-Vector Vector::rotateByZ(Number fi){
-    return  Vector(m_x * cos(fi) - m_y * sin(fi), m_x * sin(fi) + m_y * cos(fi), 0.0f);
+Vector Vector::rotateByZ( Number fi ) {
+    return Vector( m_x * cos( fi ) - m_y * sin( fi ), m_x * sin( fi ) + m_y * cos( fi ), 0.0f );
 };
 
 Vector Vector::rotateByY( Number fi ) {
     return Vector( m_z * sin( fi ) + m_x * cos( fi ), m_y, m_z * cos( fi ) - m_x * sin( fi ));
+}
+
+const Number &Vector::getX() const {
+    return m_x;
+}
+
+void Vector::setX( const Number &x ) {
+    m_x = x;
+}
+
+const Number &Vector::getY() const {
+    return m_y;
+}
+
+void Vector::setY( const Number &y ) {
+    m_y = y;
+}
+
+const Number &Vector::getZ() const {
+    return m_z;
+}
+
+void Vector::setZ( const Number &z ) {
+    m_z = z;
 };
 
-Vector operator*( const Number& s, const Vector& v ) {
+Vector operator*( const Number &s, const Vector &v ) {
     return Vector( v.m_x * s, v.m_y * s, v.m_z * s );
 }

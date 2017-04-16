@@ -9,7 +9,7 @@
 
 struct Matrix {
     //===============================================================
-    Number m_matrix[4][4];
+    Number matrix[4][4];
 
     void clear();
 

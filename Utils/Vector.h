@@ -12,6 +12,18 @@ struct Vector {
 
     Number m_x, m_y, m_z;
 
+    const Number &getX() const;
+
+    void setX( const Number &x );
+
+    const Number &getY() const;
+
+    void setY( const Number &y );
+
+    const Number &getZ() const;
+
+    void setZ( const Number &z );
+
     Vector();
 
     Vector( Number x0, Number y0, Number z0 = 0 );

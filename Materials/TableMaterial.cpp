@@ -22,10 +22,6 @@ Color TableMaterial::getKA( Vector &v ) {
     return ret;
 }
 
-Material *TableMaterial::clone() {
-    return new TableMaterial( *this );
-}
-
 Color TableMaterial::getKD( Vector &v ) {
     Color ret = getKA( v );
     return ret;

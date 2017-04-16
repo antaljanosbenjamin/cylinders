@@ -6,7 +6,7 @@
 #define CYLINDERS_MATERIAL_H
 
 
-#include "../Utils/Vector.h"
+#include "../MathUtils/Vector.h"
 #include "Color.h"
 
 enum MaterialType {

@@ -5,7 +5,7 @@
 #ifndef CYLINDERS_OBJECT_H
 #define CYLINDERS_OBJECT_H
 
-#include "../Utils/Matrix.h"
+#include "../MathUtils/Matrix.h"
 
 struct Ray;
 struct RayHit;
@@ -29,10 +29,11 @@ class Object {
 protected:
     Matrix transform, inverseTransform;
     Matrix scalem, rotate, shift, inversScale, inverseRotate, inverseShift;
-    Material *material;
 
 public:
-    Object(Material& material_init);
+    Material *material;
+
+    Object( Material *material_init );
 
     virtual ~Object();
 

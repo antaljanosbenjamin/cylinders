@@ -5,7 +5,7 @@
 #ifndef CYLINDERS_RAY_H
 #define CYLINDERS_RAY_H
 
-#include "../Utils/Vector.h"
+#include "../MathUtils/Vector.h"
 
 class Object;
 

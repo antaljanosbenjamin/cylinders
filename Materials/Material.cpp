@@ -56,10 +56,10 @@ bool Material::refract( Vector view, Vector normal, Vector &refractedRay ) {
     return true;
 }
 
-virtual Color Material::getKD( Vector &v ) {
+Color Material::getKD( Vector &v ) {
     return kd;
 }
 
-virtual Color Material::getKA( Vector &v ) {
+Color Material::getKA( Vector &v ) {
     return ka;
 }

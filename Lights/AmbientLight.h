@@ -12,6 +12,7 @@ struct AmbientLight
         : public Light {
     Color Lout;
 
+public:
     AmbientLight() {
         Lout = Color( 1, 1, 1 );
     }
@@ -23,7 +24,7 @@ struct AmbientLight
     }
 
     Vector getDirection( Vector &targetPoint ) {
-        return Vector( 0, 0, 0 );float
+        return Vector( 0, 0, 0 );
     }
 
     Number getDistance( Vector &targetPoint ) {

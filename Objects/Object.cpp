@@ -6,12 +6,12 @@
 #include "../CameraUtils/Ray.h"
 #include "../Materials/Material.h"
 
-Object::Object( Material &material_init )
-        : transform(), inverseTransform(), scalem(), rotate(), shift(), inversScale(), inverseRotate(), inverseShift(), material( material_init.clone()) {
+Object::Object( Material *material_init )
+        : transform(), inverseTransform(), scalem(), rotate(), shift(), inversScale(), inverseRotate(), inverseShift(), material( material_init ) {
     clearTransform();
 }
 
-virtual Object::~Object() {};
+Object::~Object() {};
 
 Ray Object::convertRayToObjectCoords( Ray &r ) {
     return Ray( convertToObjectCoords( r.source ), convertToObjectCoords( r.source + r.direction ) - convertToObjectCoords( r.source ));

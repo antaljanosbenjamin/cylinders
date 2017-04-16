@@ -79,6 +79,8 @@ struct Number {
     
     float operator=( const float &floatValue );
 
+    double operator=( const double &doubleValue );
+
     operator float() const;
 
 private:

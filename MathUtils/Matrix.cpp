@@ -33,17 +33,17 @@ Matrix Matrix::operator*( const Matrix &mat ) { // mátrixok szorzása
 }
 
 Vector Matrix::operator*( const Vector v ) { // Vektor-mátrix szorzás
-    Number Xh = matrix[0][0] * v.x + matrix[0][1] * v.m_y + matrix[0][2] * v.m_z + matrix[0][3];
-    Number Yh = matrix[1][0] * v.x + matrix[1][1] * v.m_y + matrix[1][2] * v.m_z + matrix[1][3];
-    Number Zh = matrix[2][0] * v.x + matrix[2][1] * v.m_y + matrix[2][2] * v.m_z + matrix[2][3];
-    Number h = matrix[3][0] * v.x + matrix[3][1] * v.m_y + matrix[3][2] * v.m_z + matrix[3][3];
+    Number Xh = matrix[0][0] * v.m_x + matrix[0][1] * v.m_y + matrix[0][2] * v.m_z + matrix[0][3];
+    Number Yh = matrix[1][0] * v.m_x + matrix[1][1] * v.m_y + matrix[1][2] * v.m_z + matrix[1][3];
+    Number Zh = matrix[2][0] * v.m_x + matrix[2][1] * v.m_y + matrix[2][2] * v.m_z + matrix[2][3];
+    Number h = matrix[3][0] * v.m_x + matrix[3][1] * v.m_y + matrix[3][2] * v.m_z + matrix[3][3];
     return Vector( Xh / h, Yh / h, Zh / h );
 }
 
 Vector operator*( const Vector v, const Matrix &mat ) { // Vektor-mátrix szorzás
-    Number Xh = mat.matrix[0][0] * v.x + mat.matrix[1][0] * v.m_y + mat.matrix[2][0] * v.m_z + mat.matrix[3][0];
-    Number Yh = mat.matrix[0][1] * v.x + mat.matrix[1][1] * v.m_y + mat.matrix[2][1] * v.m_z + mat.matrix[3][1];
-    Number Zh = mat.matrix[0][2] * v.x + mat.matrix[1][2] * v.m_y + mat.matrix[2][2] * v.m_z + mat.matrix[3][2];
-    Number h = mat.matrix[0][3] * v.x + mat.matrix[1][3] * v.m_y + mat.matrix[2][3] * v.m_z + mat.matrix[3][3];
+    Number Xh = mat.matrix[0][0] * v.m_x + mat.matrix[1][0] * v.m_y + mat.matrix[2][0] * v.m_z + mat.matrix[3][0];
+    Number Yh = mat.matrix[0][1] * v.m_x + mat.matrix[1][1] * v.m_y + mat.matrix[2][1] * v.m_z + mat.matrix[3][1];
+    Number Zh = mat.matrix[0][2] * v.m_x + mat.matrix[1][2] * v.m_y + mat.matrix[2][2] * v.m_z + mat.matrix[3][2];
+    Number h = mat.matrix[0][3] * v.m_x + mat.matrix[1][3] * v.m_y + mat.matrix[2][3] * v.m_z + mat.matrix[3][3];
     return Vector( Xh / h, Yh / h, Zh / h );
 };

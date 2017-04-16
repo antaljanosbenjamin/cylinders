@@ -2,13 +2,16 @@
 // Created by kovi on 4/16/17.
 //
 
+
 #include "Plane.h"
 
-Plane::Plane( Material &mat, Number width_init, Number depth_init )
+#include <cstdlib>
+
+Plane::Plane( Material *mat, Number width_init, Number depth_init )
         : Object( mat ), normal( Vector( 0.0f, 1.0f, 0.0f )), width( width_init ), depth( depth_init )
           , widthPer2( width / 2.0f ), depthPer2( depth / 2.0f ) {};
 
-virtual Plane::~Plane() {}
+Plane::~Plane() {}
 
 Vector Plane::getNormalAtPoint( Vector &intersectPoint ) {
     Vector ownIntersectPoint( convertToObjectCoords( intersectPoint ));

@@ -5,7 +5,7 @@
 #ifndef CYLINDERS_CAMERA_H
 #define CYLINDERS_CAMERA_H
 
-#include "../Utils/Vector.h"
+#include "../MathUtils/Vector.h"
 #include "Ray.h"
 
 struct Camera {

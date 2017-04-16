@@ -15,7 +15,7 @@ class Plane
     Number widthPer2, depthPer2;
 
 public:
-    Plane( Material &mat, Number width_init, Number depth_init );
+    Plane( Material *mat, Number width_init, Number depth_init );
 
     virtual ~Plane();
 

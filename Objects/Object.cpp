@@ -3,6 +3,13 @@
 //
 
 #include "Object.h"
+#include "../CameraUtils/Ray.h"
+#include "../Materials/Material.h"
+
+Object::Object( Material &material_init )
+        : transform(), inverseTransform(), scalem(), rotate(), shift(), inversScale(), inverseRotate(), inverseShift(), material( material_init.clone()) {
+    clearTransform();
+}
 
 virtual Object::~Object() {};
 
@@ -29,7 +36,7 @@ Vector Object::convertToWorldsCoords( Vector v ) {
     return v * transform;
 }
 
-void Object::setScale( float scale ) {
+void Object::setScale( Number scale ) {
     Matrix scaleMatrix;
     scaleMatrix.loadIdentity();
     scaleMatrix.matrix[0][0] = scaleMatrix.matrix[1][1] = scaleMatrix.matrix[2][2] = scale;
@@ -41,7 +48,7 @@ void Object::setScale( float scale ) {
     inverseTransform = scaleMatrix * inverseTransform;
 }
 
-void Object::setScale( float scaleX, float scaleY, float scaleZ ) {
+void Object::setScale( Number scaleX, Number scaleY, Number scaleZ ) {
     Matrix scaleMatrix;
     scaleMatrix.loadIdentity();
     scaleMatrix.matrix[0][0] = scaleX;
@@ -54,9 +61,9 @@ void Object::setScale( float scaleX, float scaleY, float scaleZ ) {
     inverseTransform = scaleMatrix * inverseTransform;
 }
 
-void Object::setRotateX( float fi ) {
-    float cosfi = cos( fi );
-    float sinfi = sin( fi );
+void Object::setRotateX( Number fi ) {
+    Number cosfi = cos( fi );
+    Number sinfi = sin( fi );
     Matrix rotateMatrix;
     rotateMatrix.loadIdentity();
     rotateMatrix.matrix[1][1] = rotateMatrix.matrix[2][2] = cosfi;
@@ -71,9 +78,9 @@ void Object::setRotateX( float fi ) {
     inverseTransform = rotateMatrix * inverseTransform;
 }
 
-void Object::setRotateY( float fi ) {
-    float cosfi = cos( fi );
-    float sinfi = sin( fi );
+void Object::setRotateY( Number fi ) {
+    Number cosfi = cos( fi );
+    Number sinfi = sin( fi );
     Matrix rotateMatrix;
     rotateMatrix.loadIdentity();
     rotateMatrix.matrix[0][0] = rotateMatrix.matrix[2][2] = cosfi;
@@ -88,9 +95,9 @@ void Object::setRotateY( float fi ) {
     inverseTransform = rotateMatrix * inverseTransform;
 }
 
-void Object::setRotateZ( float fi ) {
-    float cosfi = cos( fi );
-    float sinfi = sin( fi );
+void Object::setRotateZ( Number fi ) {
+    Number cosfi = cos( fi );
+    Number sinfi = sin( fi );
     Matrix rotateMatrix;
     rotateMatrix.loadIdentity();
     rotateMatrix.matrix[0][0] = rotateMatrix.matrix[1][1] = cosfi;
@@ -105,7 +112,7 @@ void Object::setRotateZ( float fi ) {
     inverseTransform = rotateMatrix * inverseTransform;
 }
 
-void Object::setRotate( float xfi, float yfi, float zfi ) {
+void Object::setRotate( Number xfi, Number yfi, Number zfi ) {
     setRotateZ( zfi );
     setRotateY( yfi );
     setRotateX( xfi );

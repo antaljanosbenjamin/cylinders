@@ -21,7 +21,7 @@ struct Ray {
 
 struct RayHit {
     Object *hittedObject;
-    float hittingTime;
+    Number hittingTime;
     Vector intersectPoint
 
 #ifdef DEBUG

@@ -10,14 +10,14 @@
 
 struct Camera {
     Vector eye, lookat, up, right;
-    float xMax, yMax;
+    Number xMax, yMax;
 
 
-    Camera( const Vector &eye_init, const Vector &lookat_init, const Vector &up_init, float xMax_init, float yMax_init );
+    Camera( const Vector &eye_init, const Vector &lookat_init, const Vector &up_init, Number xMax_init, Number yMax_init );
 
     void setNewEyeAndLookat( const Vector &e, const Vector &l, const Vector &u );
 
-    Ray getRay( float xPos, float yPos );
+    Ray getRay( Number xPos, Number yPos );
 };
 
 #endif //CYLINDERS_CAMERA_H

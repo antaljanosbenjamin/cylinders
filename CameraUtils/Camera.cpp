@@ -4,7 +4,7 @@
 
 #include "Camera.h"
 
-Camera::Camera( const Vector &eye_init, const Vector &lookat_init, const Vector &up_init, float xMax_init, float yMax_init )
+Camera::Camera( const Vector &eye_init, const Vector &lookat_init, const Vector &up_init, Number xMax_init, Number yMax_init )
         : eye( eye_init ), lookat( lookat_init ), up( up_init ), xMax( xMax_init ), yMax( yMax_init ) {
     right = ( lookat - eye ) % up;
     up = right % ( lookat - eye );
@@ -22,7 +22,7 @@ void Camera::setNewEyeAndLookat( const Vector &e, const Vector &l, const Vector 
     up = up.getNormalized() * 15;
 }
 
-Ray Camera::getRay( float xPos, float yPos ) {
+Ray Camera::getRay( Number xPos, Number yPos ) {
     Vector dir(( lookat + ( up * ( yPos - ( yMax / 2 )) / ( yMax / 2 ) + right * ( xPos - ( xMax / 2 )) / ( xMax / 2 )) - eye ).getNormalized());
     return Ray( eye, dir );
 }

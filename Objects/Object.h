@@ -26,16 +26,19 @@ struct ObjectPosition {
 
 
 class Object {
+protected:
     Matrix transform, inverseTransform;
     Matrix scalem, rotate, shift, inversScale, inverseRotate, inverseShift;
     Material *material;
 
+public:
+    Object(Material& material_init);
+
     virtual ~Object();
 
-    virtual float intersect( Ray &r, RayHit &hit ) = 0;
+    virtual Number intersect( Ray &r, RayHit &hit ) = 0;
 
     virtual Vector getNormalAtPoint( Vector &intersectPoint ) = 0;
-
 
     Ray convertRayToObjectCoords( Ray &r );
 
@@ -43,23 +46,23 @@ class Object {
 
     void clearTransform();
 
-    void setScale( float scale );
+    void setScale( Number scale );
 
-    void setScale( float scaleX, float scaleY, float scaleZ );
+    void setScale( Number scaleX, Number scaleY, Number scaleZ );
 
-    void setRotateX( float fi );
+    void setRotateX( Number fi );
 
-    void setRotateY( float fi );
+    void setRotateY( Number fi );
 
-    void setRotateZ( float fi );
+    void setRotateZ( Number fi );
 
-    void setRotate( float xfi, float yfi, float zfi );
+    void setRotate( Number xfi, Number yfi, Number zfi );
 
     void setShift( Vector pos );
 
     void setNewBasesAndOrigo( Vector &newY, Vector &newOrigo );
 
-private:
+protected:
     Vector convertToObjectCoords( Vector v );
 
     Vector convertToWorldsCoords( Vector v );

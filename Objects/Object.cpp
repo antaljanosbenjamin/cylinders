@@ -177,3 +177,12 @@ void Object::setNewBasesAndOrigo( Vector &newY, Vector &newOrigo ) {
 
     inverseTransform = newBaseMatrix * inverseTransform;
 }
+
+Color Object::getKD( const Vector &intersectPoint ){
+    Vector ownIntersectPoint = convertToObjectCoords(intersectPoint);
+    return material->getKD( ownIntersectPoint );
+}
+
+Color Object::getKS() {
+    return material->ks;
+}

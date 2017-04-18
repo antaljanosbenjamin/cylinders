@@ -6,11 +6,10 @@
 #define CYLINDERS_OBJECT_H
 
 #include "../MathUtils/Matrix.h"
+#include "../Materials/Material.h"
 
 struct Ray;
 struct RayHit;
-
-struct Material;
 
 
 struct ObjectPosition {
@@ -41,6 +40,10 @@ public:
 
     virtual Vector getNormalAtPoint( Vector &intersectPoint ) = 0;
 
+    virtual Color getKD( const Vector &intersectPoint );
+
+    virtual Color getKS();
+
     Ray convertRayToObjectCoords( Ray &r );
 
     ObjectPosition convertPositionToWordCoords( ObjectPosition &op );
@@ -62,6 +65,7 @@ public:
     void setShift( Vector pos );
 
     void setNewBasesAndOrigo( Vector &newY, Vector &newOrigo );
+
 
 protected:
     Vector convertToObjectCoords( Vector v );

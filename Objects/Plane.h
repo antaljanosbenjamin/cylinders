@@ -10,6 +10,7 @@
 
 class Plane
         : public Object {
+private:
     Vector normal;
     Number width, depth;
     Number widthPer2, depthPer2;
@@ -23,10 +24,12 @@ public:
 
     ObjectPosition getPositionByUV( Number u, Number v );
 
+    Number intersect( Ray &r, RayHit &hit );
+
+private:
     // Object koordinátákban kapja meg
     bool planeContains( Vector v );
 
-    Number intersect( Ray &r, RayHit &hit );
 };
 
 

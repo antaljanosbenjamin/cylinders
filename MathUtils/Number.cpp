@@ -143,7 +143,7 @@ float Number::operator=( const float &floatValue ) {
     return floatValue;
 }
 
-double Number::operator=( const double &doubleValue ){
+double Number::operator=( const double &doubleValue ) {
     value = doubleValue;
     return doubleValue;
 }

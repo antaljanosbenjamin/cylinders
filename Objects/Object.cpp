@@ -62,8 +62,8 @@ void Object::setScale( Number scaleX, Number scaleY, Number scaleZ ) {
 }
 
 void Object::setRotateX( Number fi ) {
-    Number cosfi = cos( fi );
-    Number sinfi = sin( fi );
+    Number cosfi( cos( fi ));
+    Number sinfi( sin( fi ));
     Matrix rotateMatrix;
     rotateMatrix.loadIdentity();
     rotateMatrix.matrix[1][1] = rotateMatrix.matrix[2][2] = cosfi;
@@ -79,8 +79,8 @@ void Object::setRotateX( Number fi ) {
 }
 
 void Object::setRotateY( Number fi ) {
-    Number cosfi = cos( fi );
-    Number sinfi = sin( fi );
+    Number cosfi( cos( fi ));
+    Number sinfi( sin( fi ));
     Matrix rotateMatrix;
     rotateMatrix.loadIdentity();
     rotateMatrix.matrix[0][0] = rotateMatrix.matrix[2][2] = cosfi;
@@ -96,8 +96,8 @@ void Object::setRotateY( Number fi ) {
 }
 
 void Object::setRotateZ( Number fi ) {
-    Number cosfi = cos( fi );
-    Number sinfi = sin( fi );
+    Number cosfi( cos( fi ));
+    Number sinfi( sin( fi ));
     Matrix rotateMatrix;
     rotateMatrix.loadIdentity();
     rotateMatrix.matrix[0][0] = rotateMatrix.matrix[1][1] = cosfi;

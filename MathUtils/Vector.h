@@ -26,7 +26,7 @@ struct Vector {
 
     Vector();
 
-    Vector( Number x0, Number y0, Number z0 = 0 );
+    Vector( Number x0, Number y0, Number z0 = Number( 0 ));
 
     Vector operator*( const Number &a );
 

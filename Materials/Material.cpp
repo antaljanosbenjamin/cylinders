@@ -18,7 +18,7 @@ Color  Material::makeF0( Color &colorN, Color &colorK ) {
 }
 
 Color Material::Fresnel( Vector view, Vector normal ) {
-    Number cosa = fabs( normal * view );
+    Number cosa = Number( fabs( normal * view ) );
     return F0 + ( Color( 1.0f, 1.0f, 1.0f ) - F0 ) * pow( 1 - cosa, 5 );
 }
 

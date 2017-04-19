@@ -80,7 +80,7 @@ struct Number {
     // Aritmetic function
     static Number pow( const Number base, const Number exponent );
 
-    static Number pow( const Number base, const float exponent );
+    static Number pow( const Number base, const double exponent );
 
     static Number sqrt( const Number x );
 

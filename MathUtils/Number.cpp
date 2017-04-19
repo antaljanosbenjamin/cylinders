@@ -143,7 +143,7 @@ Number Number::pow( const Number base, const Number exponent ) {
     return Number( std::pow( base.value, exponent.value ));
 }
 
-Number Number::pow( const Number base, const float exponent ) {
+Number Number::pow( const Number base, const double exponent ) {
     return Number( std::pow( base.value, exponent ));
 }
 

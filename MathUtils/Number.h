@@ -5,10 +5,10 @@
 #ifndef CYLINDERS_NUMBER_H
 #define CYLINDERS_NUMBER_H
 
+typedef float NumberValue;
 
 struct Number {
 
-    typedef float NumberValue;
     NumberValue value;
 
     Number();

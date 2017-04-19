@@ -103,39 +103,39 @@ bool Number::operator<=( const double &doubleValue ) const {
 
 
 Number Number::operator+( const double &doubleValue ) const {
-    return *this + Number ( doubleValue );
+    return *this + Number( doubleValue );
 }
 
 Number Number::operator-( const double &doubleValue ) const {
-    return *this - Number ( doubleValue );
+    return *this - Number( doubleValue );
 }
 
 Number Number::operator*( const double &doubleValue ) const {
-    return *this * Number ( doubleValue );
+    return *this * Number( doubleValue );
 }
 
 Number Number::operator/( const double &doubleValue ) const {
-    return *this / Number ( doubleValue );
+    return *this / Number( doubleValue );
 }
 
 Number &Number::operator+=( const double &doubleValue ) {
-    return *this += Number ( doubleValue );
+    return *this += Number( doubleValue );
 }
 
 Number &Number::operator-=( const double &doubleValue ) {
-    return *this -= Number ( doubleValue );
+    return *this -= Number( doubleValue );
 }
 
 Number &Number::operator*=( const double &doubleValue ) {
-    return *this *= Number ( doubleValue );
+    return *this *= Number( doubleValue );
 }
 
 Number &Number::operator/=( const double &doubleValue ) {
-    return *this /= Number ( doubleValue );
+    return *this /= Number( doubleValue );
 }
 
 double Number::operator=( const double &doubleValue ) {
-    *this = Number ( doubleValue );
+    *this = Number( doubleValue );
     return doubleValue;
 }
 

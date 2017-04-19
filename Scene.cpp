@@ -2,7 +2,10 @@
 // Created by kovi on 4/16/17.
 //
 
+#include <iostream>
 #include "Scene.h"
+
+int Scene::TRACE_DEPTH = 5;
 
 Scene::Scene( Camera cam_init, int screenW, int screenH, Color *img )
         : cam( cam_init ), screenWidth( screenW ), screenHeight( screenH ), image( img ), lightsNum( 0 ), objectsNum( 0 ) {
@@ -26,14 +29,11 @@ void Scene::addLight( Light *light ) {
 }
 
 void Scene::render() {
-    for( int i = 0; i < screenWidth; i++ ){
-        //std::cout << "i: " << i << std::endl;
-        for( int j = 0; j < screenHeight; j++ ){
-            Ray ray = cam.getRay( i, j );
+    for( int xPos = 0; xPos < screenWidth; xPos++ ){
+        for( int yPos = 0; yPos < screenHeight; yPos++ ){
+            Ray ray = cam.getRay( xPos, yPos );
             Color returnColor = trace( ray, 0 );
-            /*if (!(returnColor.r > -1.0f))
-            returnColor = image[j*screenWidth + i - 1];*/
-            image[j * screenWidth + i] = returnColor;
+            image[yPos * screenWidth + xPos] = returnColor;
         }
     }
 }
@@ -52,7 +52,7 @@ RayHit Scene::intersectAll( Ray &r ) {
 }
 
 Color Scene::trace( Ray &r, int d ) {
-    if( d >= 15 )
+    if( d >= TRACE_DEPTH )
         return ambientLight.Lout;
     RayHit hit = intersectAll( r );
     if( hit.hittingTime > 0.0f ){
@@ -134,7 +134,7 @@ void Scene::build() {
     // TODO az objektumnak getKA/KD függvényt csinálni
 
     Material *pink = new TableMaterial( Number( 0 ), Number( 5 ), Color( 0.0f, 0.0f, 0.0f ), Color( 1.0f, 0.3f, 0.3f ) / 2, Color( 0.3, 0.3, 0.3 ), ROUGH );
-    Plane *table = new Plane( pink, Number( 100 ), Number( 100 ) );
+    Plane *table = new Plane( pink, Number( 100 ), Number( 100 ));
     addObject( table );
 
 
@@ -155,6 +155,6 @@ void Scene::build() {
     Material *glass = new Material( Number( 1.5f ), Number( 0 ), glassF0, Color( 0, 0, 0 ), Color( 0, 0, 0 ), REFRACTIVE );
 
     InfiniteCylinder *cylinder = new InfiniteCylinder( glass, Number( 10.0 ));
-    cylinder->setRotateZ( Number( M_PI / 4 ) );
+    cylinder->setRotateZ( Number( M_PI / 4 ));
     addObject( cylinder );
 }

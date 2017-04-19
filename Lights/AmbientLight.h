@@ -30,14 +30,6 @@ public:
     Number getDistance( Vector &targetPoint ) {
         return Number( 0 );
     }
-
-    Light *clone() {
-        return new AmbientLight( *this );
-    }
-
-    bool isPointLight() {
-        return false;
-    };
 };
 
 #endif //CYLINDERS_AMBIENTLIGHT_H

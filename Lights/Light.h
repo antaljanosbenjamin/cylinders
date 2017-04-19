@@ -16,8 +16,6 @@ struct Light {
 
     virtual Number getDistance( Vector &targetPoint ) = 0;
 
-    virtual Light *clone() = 0;
-
     virtual ~Light() {};
 };
 

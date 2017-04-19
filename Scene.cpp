@@ -131,23 +131,66 @@ void Scene::build() {
 
     ambientLight.Lout = Color( 0.7f, 0.7f, 1.0f );
 
-    // Asztal
-    // TODO az objektumnak getKA/KD függvényt csinálni
+    KDFunction squaredKD = []( const Vector &v ) {
+        int x = nabs( v.getX() / 4.0 ).value;
+        int z = nabs( v.getZ() / 4 ).value;
+        if( v.getX() < 0.0f )
+            x++;
+        if( v.getZ() < 0.0f )
+            z++;
+        x = x % 2;
+        z = z % 2;
+        Color ret(( x * 0.5f + 0.5f ) / 2.0f, 0.2f, ( z * 0.5f + 0.3f ) / 2.0f );
+        return ret;
+    };
 
-    Material *pink = new TableMaterial( Number( 0 ), Number( 5 ), Color( 0.0f, 0.0f, 0.0f ), Color( 1.0f, 0.3f, 0.3f ) / 2, Color( 0.3, 0.3, 0.3 ), ROUGH );
-    Plane *table = new Plane( pink, Number( 100 ), Number( 100 ));
-    addObject( table );
+    KDFunction diagonalKD = []( const Vector &v ) {
+        Vector copy = v.rotateByY( Number( M_PI / 4 ));
+        int x = nabs( copy.getX() / 4.0 ).value;
+        int z = nabs( copy.getZ() / 4 ).value;
+        if( copy.getX() < 0.0f )
+            x++;
+        if( copy.getZ() < 0.0f )
+            z++;
+        x = x % 2;
+        z = z % 2;
+        Color ret(( x * 0.2f + 0.1f ) / 2.0f, 0.8f, ( z * 1.6f + 0.3f ) / 2.0f );
+        return ret;
+    };
+
+    KDFunction cylinderKD = []( const Vector &v ) {
+        Vector copy = v.rotateByY( Number( M_PI / 4 ));
+        return Color( nsin( v.getX() * 1.1 ), ncos( copy.getX() * 0.8 ), ncos( v.getZ()));
+    };
+
+    Material *diagonal = new TableMaterial( Number( 0 ), Number( 5 ), Color( 0.0f, 0.0f, 0.0f ), Color( 1.0f, 0.3f, 0.3f ) / 2, Color( 0.3, 0.3, 0.3 ), ROUGH,
+                                            diagonalKD, diagonalKD );
+
+    Material *squared = new TableMaterial( Number( 0 ), Number( 5 ), Color( 0.0f, 0.0f, 0.0f ), Color( 1.0f, 0.3f, 0.3f ) / 2, Color( 0.3, 0.3, 0.3 ), ROUGH,
+                                           squaredKD, squaredKD );
+
+    Material *cylinderMaterial = new TableMaterial( Number( 0 ), Number( 5 ), Color( 0.0f, 0.0f, 0.0f ), Color( 1.0f, 0.3f, 0.3f ) / 2, Color( 0.3, 0.3, 0.3 ),
+                                                    ROUGH,
+                                                    cylinderKD, cylinderKD );
+
+    Plane *bottom = new Plane( squared, Number( 100 ), Number( 100 ));
+    addObject( bottom );
+
+    Plane *top = new Plane( diagonal, Number( 100 ), Number( 100 ));
+    top->setRotateZ( Number( M_PI ));
+    top->setShift( Vector( 0, 25, 0 ));
+    addObject( top );
 
 
-//        Color silverN = Color(0.14f, 0.16f, 0.13f);
-//        Color silverK = Color(4.1f, 2.4f, 3.1f);
-//        Color silverF0 = Material::makeF0(silverN, silverK);
-//        Material *silver = new Material(0, 0, silverF0, Color(0,0,0), Color(0,0,0), REFLECTIVE);
-//
-//        Color goldN = Color(0.17f, 0.35f, 1.5f);
-//        Color goldK = Color(3.1f, 2.7f, 1.9f);
-//        Color goldF0 = Material::makeF0(goldN, goldK);
-//        Material gold = Material(0, 0, goldF0, Color(0,0,0), Color(0,0,0), REFLECTIVE);
+    Color silverN = Color( 0.14f, 0.16f, 0.13f );
+    Color silverK = Color( 4.1f, 2.4f, 3.1f );
+    Color silverF0 = Material::makeF0( silverN, silverK );
+    Material *silver = new Material( Number( 0 ), Number( 0 ), silverF0, Color( 0, 0, 0 ), Color( 0, 0, 0 ), REFLECTIVE );
+
+    Color goldN = Color( 0.17f, 0.35f, 1.5f );
+    Color goldK = Color( 3.1f, 2.7f, 1.9f );
+    Color goldF0 = Material::makeF0( goldN, goldK );
+    Material *gold = new Material( Number( 0 ), Number( 0 ), goldF0, Color( 0, 0, 0 ), Color( 0, 0, 0 ), REFLECTIVE );
 
 
     Color glassN = Color( 1.5f, 1.5f, 1.5f );
@@ -155,9 +198,18 @@ void Scene::build() {
     Color glassF0 = Material::makeF0( glassN, glassK );
     Material *glass = new Material( Number( 1.5f ), Number( 0 ), glassF0, Color( 0, 0, 0 ), Color( 0, 0, 0 ), REFRACTIVE );
 
-    InfiniteCylinder *cylinder = new InfiniteCylinder( glass, Number( 10.0 ));
-    cylinder->setRotateZ( Number( M_PI / 4 ));
-    addObject( cylinder );
+    InfiniteCylinder *glassCylinder = new InfiniteCylinder( glass, Number( 3 ));
+    glassCylinder->setRotateZ( Number( M_PI / 6 ));
+    addObject( glassCylinder );
+
+    InfiniteCylinder *texturedCylinder = new InfiniteCylinder( cylinderMaterial, Number( 3 ));
+    texturedCylinder->setRotateX( Number(( M_PI / 6 ) * 5 ));
+    texturedCylinder->setRotateY( Number(( M_PI / 6 ) * 4 ));
+    texturedCylinder->setShift( Vector( -10, 0, 2 ));
+    addObject( texturedCylinder );
+
+    InfiniteCylinder *roomCylinder = new InfiniteCylinder( gold, Number( 30 ));
+    addObject( roomCylinder );
 }
 
 void Scene::smoothOutEdges() {
@@ -179,8 +231,8 @@ bool Scene::needSmoothing( int xPos, int yPos ) {
     Color sum = c1 + c2 + c3 + c4;
     Color average = sum / 4;
 
-    if( c1 < average / 2 || c1 > average * 2 )
-        return true;
+//    if( c1 < average / 2 || c1 > average * 2 )
+//        return true;
 
     return false;
 }
@@ -188,7 +240,7 @@ bool Scene::needSmoothing( int xPos, int yPos ) {
 Color Scene::getSmoothedColor( int xPos, int yPos ) {
     Color sum;
 
-    int antialiasing = 16;
+    int antialiasing = 4;
 
     Number step( 1.0 / antialiasing );
     for( Number xSubPos = xPos - 0.5 + step / 2; xSubPos < xPos + 0.5; xSubPos += step ){

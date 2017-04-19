@@ -42,9 +42,9 @@ struct Material {
 
     bool refract( Vector view, Vector normal, Vector &refractedRay );
 
-    virtual Color getKD( Vector &v );
+    virtual Color getKD( const Vector &v );
 
-    virtual Color getKA( Vector &v );
+    virtual Color getKA( const Vector &v );
 };
 
 

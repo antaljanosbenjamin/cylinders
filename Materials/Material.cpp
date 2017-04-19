@@ -19,7 +19,7 @@ Color  Material::makeF0( Color &colorN, Color &colorK ) {
 
 Color Material::Fresnel( Vector view, Vector normal ) {
     Number cosa ( nabs( normal * view ) );
-    return F0 + ( Color( 1.0f, 1.0f, 1.0f ) - F0 ) * pow( 1 - cosa.value, 5 );
+    return F0 + ( Color( 1.0f, 1.0f, 1.0f ) - F0 ) * npow( 1 - cosa, 5 );
 }
 
 bool Material::isReflective() {
@@ -56,10 +56,10 @@ bool Material::refract( Vector view, Vector normal, Vector &refractedRay ) {
     return true;
 }
 
-Color Material::getKD( Vector &v ) {
+Color Material::getKD( const Vector &v ) {
     return kd;
 }
 
-Color Material::getKA( Vector &v ) {
+Color Material::getKA( const Vector &v ) {
     return ka;
 }

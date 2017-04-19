@@ -66,11 +66,11 @@ Vector Vector::getNormalized() const {
     return ( *this ) / this->length();
 };
 
-Vector Vector::rotateByZ( Number fi ) {
+Vector Vector::rotateByZ( Number fi ) const {
     return Vector( m_x * ncos( fi ) - m_y * nsin( fi ), m_x * nsin( fi ) + m_y * ncos( fi ), Number( 0 ) );
 };
 
-Vector Vector::rotateByY( Number fi ) {
+Vector Vector::rotateByY( Number fi ) const {
     return Vector( m_z * nsin( fi ) + m_x * ncos( fi ), m_y, m_z * ncos( fi ) - m_x * nsin( fi ));
 }
 

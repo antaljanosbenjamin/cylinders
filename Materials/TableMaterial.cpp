@@ -4,25 +4,17 @@
 
 #include "TableMaterial.h"
 
-TableMaterial::TableMaterial( Number n_init, Number shine_init, Color F0_init, Color kd_init, Color ks_init, MaterialType type_init )
-        : Material( n_init, shine_init, F0_init, kd_init, ks_init, type_init ) {
+TableMaterial::TableMaterial( Number n_init, Number shine_init, Color F0_init, Color kd_init, Color ks_init, MaterialType type_init, KAFunction getKAFunction,
+                              KDFunction getKDFunction )
+        : Material( n_init, shine_init, F0_init, kd_init, ks_init, type_init )
+          , m_getKAFunction( getKAFunction ), m_getKDFunction( getKDFunction ) {
     ka = ka * 0.5f;
 };
 
-Color TableMaterial::getKA( Vector &v ) {
-    int x = abs( v.getX().value / 4 );
-    int z = abs( v.getZ().value / 4 );
-    if( v.getX() < 0.0f )
-        x++;
-    if( v.getZ() < 0.0f )
-        z++;
-    x = x % 2;
-    z = z % 2;
-    Color ret(( x * 0.5f + 0.5f ) / 2.0f, 0.2f, ( z * 0.5f + 0.3f ) / 2.0f );
-    return ret;
+Color TableMaterial::getKA( const Vector &v ) {
+    return m_getKAFunction( v );
 }
 
-Color TableMaterial::getKD( Vector &v ) {
-    Color ret = getKA( v );
-    return ret;
+Color TableMaterial::getKD( const Vector &v ) {
+    return m_getKDFunction( v );
 }

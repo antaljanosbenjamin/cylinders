@@ -57,9 +57,9 @@ struct Vector {
 
     Vector getNormalized() const;
 
-    Vector rotateByZ( Number fi );
+    Vector rotateByZ( Number fi ) const;
 
-    Vector rotateByY( Number fi );
+    Vector rotateByY( Number fi ) const;
 };
 
 Vector operator*( const Number &s, const Vector &v );

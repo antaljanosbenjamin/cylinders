@@ -42,7 +42,11 @@ public:
 
     virtual Color getKD( const Vector &intersectPoint );
 
+    virtual Color getKA( const Vector &intersectPoint );
+
     virtual Color getKS();
+
+    Number getShininess();
 
     Ray convertRayToObjectCoords( Ray &r );
 

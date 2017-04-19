@@ -183,6 +183,15 @@ Color Object::getKD( const Vector &intersectPoint ){
     return material->getKD( ownIntersectPoint );
 }
 
+Color Object::getKA( const Vector &intersectPoint ){
+    Vector ownIntersectPoint = convertToObjectCoords(intersectPoint);
+    return material->getKA( ownIntersectPoint );
+}
+
 Color Object::getKS() {
-    return material->ks;
+    return material->getKS();
+}
+
+Number Object::getShininess() {
+    return material->getShineness();
 }

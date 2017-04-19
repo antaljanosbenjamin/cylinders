@@ -18,11 +18,13 @@ enum MaterialType {
     REFRACTIVE_AND_BOTH = 12
 };
 
-struct Material {
+class Material {
+protected:
     Number n, shine;
     Color F0, kd, ks, ka;
     MaterialType type;
 
+public:
     Material( Number n_init, Number shine_init, Color F0_init, Color kd_init, Color ks_init, MaterialType type_init );
     //virtual ~Material(){};
 
@@ -45,6 +47,10 @@ struct Material {
     virtual Color getKD( const Vector &v );
 
     virtual Color getKA( const Vector &v );
+
+    virtual Color getKS();
+
+    virtual Number getShineness();
 };
 
 

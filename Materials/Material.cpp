@@ -13,12 +13,12 @@ Material *Material::clone() {
     return this;
 }
 
-Color  Material::makeF0( Color &colorN, Color &colorK ) {
+Color Material::makeF0( Color &colorN, Color &colorK ) {
     return (( colorN - 1 ) * ( colorN - 1 ) + colorK * colorK ) / (( colorN + 1 ) * ( colorN + 1 ) + colorK * colorK );
 }
 
 Color Material::Fresnel( Vector view, Vector normal ) {
-    Number cosa ( nabs( normal * view ) );
+    Number cosa( nabs( normal * view ));
     return F0 + ( Color( 1.0f, 1.0f, 1.0f ) - F0 ) * npow( 1 - cosa, 5 );
 }
 
@@ -62,4 +62,12 @@ Color Material::getKD( const Vector &v ) {
 
 Color Material::getKA( const Vector &v ) {
     return ka;
+}
+
+Color Material::getKS() {
+    return ks;
+}
+
+Number Material::getShineness() {
+    return shine;
 }

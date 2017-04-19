@@ -161,8 +161,8 @@ void onInitialization() {
         }
     }
 
-    Vector eye( 0, 10, 100 );
-    Vector lookat( 0, 0, 50 );
+    Vector eye( 0, 30, 100 );
+    Vector lookat( 0, 20, 50 );
     Camera cam = Camera( eye, lookat, Vector( 0, 1, -1 ), Number((int) windowWidth ), Number((int) windowHeight ));
     Scene s = Scene( cam, windowWidth, windowHeight, background );
     s.build();

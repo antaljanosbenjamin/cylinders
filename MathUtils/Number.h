@@ -98,7 +98,7 @@ struct Number {
 
 
 private:
-    static constexpr NumberValue EPSZILON = 0.000025f;
+    static constexpr NumberValue EPSZILON = 0.0025f;
 };
 // double operators
 Number operator+( const double &lhs, const Number &rhs );

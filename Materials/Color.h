@@ -38,6 +38,14 @@ struct Color {
         return Color( r - c.r, g - c.g, b - c.b );
     }
 
+    bool operator<(const Color &c) {
+        return r < c.r || g < c.g || b < c.b;
+    }
+
+    bool operator>(const Color &c) {
+        return r > c.r || g > c.g || b > c.b;
+    }
+
     // Number operators
     Color operator*( const Number &a ) {
         return Color( r * a, g * a, b * a );

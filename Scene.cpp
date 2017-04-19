@@ -36,6 +36,7 @@ void Scene::render() {
             image[yPos * screenWidth + xPos] = returnColor;
         }
     }
+    smoothOutEdges();
 }
 
 RayHit Scene::intersectAll( Ray &r ) {
@@ -157,4 +158,46 @@ void Scene::build() {
     InfiniteCylinder *cylinder = new InfiniteCylinder( glass, Number( 10.0 ));
     cylinder->setRotateZ( Number( M_PI / 4 ));
     addObject( cylinder );
+}
+
+void Scene::smoothOutEdges() {
+    for( int xPos = 1; xPos < screenWidth - 1; xPos++ ){
+        for( int yPos = 1; yPos < screenHeight - 1; yPos++ ){
+            if( needSmoothing( xPos, yPos ))
+                image[yPos * screenWidth + xPos] = getSmoothedColor( xPos, yPos );
+        }
+    }
+}
+
+
+bool Scene::needSmoothing( int xPos, int yPos ) {
+    Color c1 = image[yPos * screenWidth + xPos];
+    Color c2 = image[( yPos + 1 ) * screenWidth + xPos];
+    Color c3 = image[yPos * screenWidth + xPos + 1];
+    Color c4 = image[( yPos + 1 ) * screenWidth + xPos + 1];
+
+    Color sum = c1 + c2 + c3 + c4;
+    Color average = sum / 4;
+
+    if( c1 < average / 2 || c1 > average * 2 )
+        return true;
+
+    return false;
+}
+
+Color Scene::getSmoothedColor( int xPos, int yPos ) {
+    Color sum;
+
+    int antialiasing = 16;
+
+    Number step( 1.0 / antialiasing );
+    for( Number xSubPos = xPos - 0.5 + step / 2; xSubPos < xPos + 0.5; xSubPos += step ){
+        for( Number ySubPos = yPos - 0.5 + step / 2; ySubPos < yPos + 0.5; ySubPos += step ){
+            Ray ray = cam.getRay( xSubPos.value, ySubPos.value );
+            Color subColor = trace( ray, 0 );
+            sum = sum + subColor;
+        }
+    }
+
+    return sum / ( antialiasing * antialiasing );
 }

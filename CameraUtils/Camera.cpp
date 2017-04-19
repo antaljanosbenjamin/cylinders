@@ -22,7 +22,7 @@ void Camera::setNewEyeAndLookat( const Vector &e, const Vector &l, const Vector 
     up = up.getNormalized() * 15;
 }
 
-Ray Camera::getRay( int xPos, int yPos ) {
+Ray Camera::getRay( double xPos, double yPos ) {
     Vector dir(( lookat + ( up * ( yPos - ( yMax / 2 )) / ( yMax / 2 ) + right * ( xPos - ( xMax / 2 )) / ( xMax / 2 )) - eye ).getNormalized());
     return Ray( eye, dir );
 }

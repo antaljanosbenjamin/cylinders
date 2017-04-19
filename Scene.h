@@ -25,6 +25,8 @@ protected:
     int screenWidth;
     int screenHeight;
 
+    static int TRACE_DEPTH;
+
 public:
     Scene( Camera cam_init, int screenW, int screenH, Color *img );
 
@@ -47,6 +49,14 @@ public:
     Color trace( Ray &r, int d );
 
     void build();
+
+private:
+
+    void smoothOutEdges();
+
+    bool  needSmoothing( int xPos, int yPos );
+
+    Color getSmoothedColor( int xPos, int yPos );
 
 };
 

@@ -13,10 +13,6 @@ struct Number {
 
     Number();
 
-    explicit Number( const int &intValue );
-
-    explicit Number( const float &floatValue );
-
     explicit Number( const double &doubleValue );
 
     // Number operators

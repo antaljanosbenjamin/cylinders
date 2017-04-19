@@ -8,12 +8,6 @@
 Number::Number()
         : value( 0.0f ) {}
 
-Number::Number( const int &intValue )
-        : value( intValue ) {}
-
-Number::Number( const float &floatValue )
-        : value( floatValue ) {}
-
 Number::Number( const double &doubleValue )
         : value( doubleValue ) {}
 

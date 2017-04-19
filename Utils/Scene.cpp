@@ -3,12 +3,14 @@
 //
 
 #include <iostream>
+#include <thread>
 #include "Scene.h"
+#include "../Lights/PointLight.h"
 
 int Scene::TRACE_DEPTH = 5;
 
 Scene::Scene( Camera cam_init, int screenW, int screenH, Color *img )
-        : cam( cam_init ), screenWidth( screenW ), screenHeight( screenH ), image( img ), lightsNum( 0 ), objectsNum( 0 ) {
+        : cam( cam_init ), screenWidth( screenW ), screenHeight( screenH ), mutex(), nextPixelNumber( 0 ), image( img ), lightsNum( 0 ), objectsNum( 0 ) {
 }
 
 Scene::~Scene() {
@@ -29,13 +31,12 @@ void Scene::addLight( Light *light ) {
 }
 
 void Scene::render() {
-    for( int xPos = 0; xPos < screenWidth; xPos++ ){
-        for( int yPos = 0; yPos < screenHeight; yPos++ ){
-            Ray ray = cam.getRay( xPos, yPos );
-            Color returnColor = trace( ray, 0 );
-            image[yPos * screenWidth + xPos] = returnColor;
-        }
-    }
+    std::thread threads[4];
+    // spawn 10 threads:
+    for( int i = 0; i < 4; ++i )
+        threads[i] = std::thread( Scene::renderTask, this );
+
+    for( auto &th : threads ) th.join();
     smoothOutEdges();
 }
 
@@ -68,18 +69,18 @@ Color Scene::trace( Ray &r, int d ) {
         Color ret( 0.0f, 0.0f, 0.0f );
         if( hit.hittedObject->material->isRough()){
             //return Color(0, 1, 0);
-            Color ka = hit.hittedObject->material->getKA( hit.intersectPoint );
+            Color ka = hit.hittedObject->getKA( hit.intersectPoint );
             ret = ka * ambientLight.Lout;
             for( int i = 0; i < lightsNum; i++ ){
                 Vector shadowDir(( lights[i]->getDirection( hit.intersectPoint )));
                 Ray shadowRay( hit.intersectPoint + shadowDir.getNormalized() * 0.01f, shadowDir );
                 RayHit shadowHit = intersectAll( shadowRay );
-                if( shadowHit.hittingTime < 0.0f ||
+                if( shadowHit.hittingTime.value < 0.0f ||
                     ( shadowHit.hittingTime * shadowRay.direction ).length() >= lights[i]->getDistance( hit.intersectPoint )){
                     Color intensity = lights[i]->getIntensity( hit.intersectPoint );
                     Color kd = hit.hittedObject->getKD( hit.intersectPoint );
                     Color ks = hit.hittedObject->getKS();
-                    Number shine = hit.hittedObject->material->shine;
+                    Number shine = hit.hittedObject->getShininess();
                     Number cosa = ( shadowRay.direction.getNormalized() & hit.normal );
                     Vector h = ( shadowRay.direction.getNormalized() - r.direction.getNormalized()).getNormalized();
                     Number cosh = ( h & hit.normal );
@@ -131,6 +132,7 @@ void Scene::build() {
 
     ambientLight.Lout = Color( 0.7f, 0.7f, 1.0f );
 
+    /// Room
     KDFunction squaredKD = []( const Vector &v ) {
         int x = nabs( v.getX() / 4.0 ).value;
         int z = nabs( v.getZ() / 4 ).value;
@@ -158,20 +160,16 @@ void Scene::build() {
         return ret;
     };
 
-    KDFunction cylinderKD = []( const Vector &v ) {
-        Vector copy = v.rotateByY( Number( M_PI / 4 ));
-        return Color( nsin( v.getX() * 1.1 ), ncos( copy.getX() * 0.8 ), ncos( v.getZ()));
-    };
-
     Material *diagonal = new TableMaterial( Number( 0 ), Number( 5 ), Color( 0.0f, 0.0f, 0.0f ), Color( 1.0f, 0.3f, 0.3f ) / 2, Color( 0.3, 0.3, 0.3 ), ROUGH,
                                             diagonalKD, diagonalKD );
 
     Material *squared = new TableMaterial( Number( 0 ), Number( 5 ), Color( 0.0f, 0.0f, 0.0f ), Color( 1.0f, 0.3f, 0.3f ) / 2, Color( 0.3, 0.3, 0.3 ), ROUGH,
                                            squaredKD, squaredKD );
 
-    Material *cylinderMaterial = new TableMaterial( Number( 0 ), Number( 5 ), Color( 0.0f, 0.0f, 0.0f ), Color( 1.0f, 0.3f, 0.3f ) / 2, Color( 0.3, 0.3, 0.3 ),
-                                                    ROUGH,
-                                                    cylinderKD, cylinderKD );
+    Color goldN = Color( 0.17f, 0.35f, 1.5f );
+    Color goldK = Color( 3.1f, 2.7f, 1.9f );
+    Color goldF0 = Material::makeF0( goldN, goldK );
+    Material *gold = new Material( Number( 0 ), Number( 0 ), goldF0, Color( 0, 0, 0 ), Color( 0, 0, 0 ), REFLECTIVE );
 
     Plane *bottom = new Plane( squared, Number( 100 ), Number( 100 ));
     addObject( bottom );
@@ -181,18 +179,10 @@ void Scene::build() {
     top->setShift( Vector( 0, 25, 0 ));
     addObject( top );
 
+    InfiniteCylinder *roomCylinder = new InfiniteCylinder( gold, Number( 30 ));
+    addObject( roomCylinder );
 
-    Color silverN = Color( 0.14f, 0.16f, 0.13f );
-    Color silverK = Color( 4.1f, 2.4f, 3.1f );
-    Color silverF0 = Material::makeF0( silverN, silverK );
-    Material *silver = new Material( Number( 0 ), Number( 0 ), silverF0, Color( 0, 0, 0 ), Color( 0, 0, 0 ), REFLECTIVE );
-
-    Color goldN = Color( 0.17f, 0.35f, 1.5f );
-    Color goldK = Color( 3.1f, 2.7f, 1.9f );
-    Color goldF0 = Material::makeF0( goldN, goldK );
-    Material *gold = new Material( Number( 0 ), Number( 0 ), goldF0, Color( 0, 0, 0 ), Color( 0, 0, 0 ), REFLECTIVE );
-
-
+    /// Glass cylinder
     Color glassN = Color( 1.5f, 1.5f, 1.5f );
     Color glassK = Color( 0.0f, 0.0f, 0.0f );
     Color glassF0 = Material::makeF0( glassN, glassK );
@@ -202,14 +192,38 @@ void Scene::build() {
     glassCylinder->setRotateZ( Number( M_PI / 6 ));
     addObject( glassCylinder );
 
+    /// Silver cylinder
+    Color silverN = Color( 0.14f, 0.16f, 0.13f );
+    Color silverK = Color( 4.1f, 2.4f, 3.1f );
+    Color silverF0 = Material::makeF0( silverN, silverK );
+    Material *silver = new Material( Number( 0 ), Number( 0 ), silverF0, Color( 0, 0, 0 ), Color( 0, 0, 0 ), REFLECTIVE );
+
+    InfiniteCylinder *silverCylinder = new InfiniteCylinder( silver, Number( 4 ));
+    silverCylinder->setRotateZ( Number( -M_PI / 7 ));
+    silverCylinder->setShift( Vector( 15, 5, 10 ));
+    addObject( silverCylinder );
+
+    /// Textured cylinder
+    KDFunction cylinderKD = []( const Vector &v ) {
+        Vector copy = v.rotateByY( Number( M_PI / 4 ));
+        return Color( nsin( v.getY() * 1.1 ), ncos( copy.getY() * 0.8 ), ncos( v.getZ()));
+    };
+
+    Material *cylinderMaterial = new TableMaterial( Number( 0 ), Number( 5 ), Color( 0.0f, 0.0f, 0.0f ), Color( 1.0f, 0.3f, 0.3f ) / 2, Color( 0.3, 0.3, 0.3 ),
+                                                    ROUGH, cylinderKD, cylinderKD );
+
     InfiniteCylinder *texturedCylinder = new InfiniteCylinder( cylinderMaterial, Number( 3 ));
     texturedCylinder->setRotateX( Number(( M_PI / 6 ) * 5 ));
     texturedCylinder->setRotateY( Number(( M_PI / 6 ) * 4 ));
     texturedCylinder->setShift( Vector( -10, 0, 2 ));
     addObject( texturedCylinder );
 
-    InfiniteCylinder *roomCylinder = new InfiniteCylinder( gold, Number( 30 ));
-    addObject( roomCylinder );
+    /// Point lights
+    PointLight *blueLight = new PointLight( Vector( 10, 10, 10 ), Color( 0, 0, 50 ));
+    addLight( blueLight );
+
+    PointLight *redLight = new PointLight( Vector( -5, 20, 15 ), Color( 50, 0, 0 ));
+    addLight( redLight );
 }
 
 void Scene::smoothOutEdges() {
@@ -252,4 +266,20 @@ Color Scene::getSmoothedColor( int xPos, int yPos ) {
     }
 
     return sum / ( antialiasing * antialiasing );
+}
+
+void Scene::renderTask(Scene *scene) {
+    scene->mutex.lock();
+    while( scene->nextPixelNumber < scene->screenWidth * scene->screenWidth ){
+        int myNextPixelNumber = scene->nextPixelNumber++;
+        scene->mutex.unlock();
+        int yPos = myNextPixelNumber / scene->screenWidth;
+        int xPos = myNextPixelNumber % scene->screenWidth;
+
+        Ray ray = scene->cam.getRay( xPos, yPos );
+        scene->image[yPos * scene->screenWidth + xPos] = scene->trace( ray, 0 );
+
+        scene->mutex.lock();
+    }
+    scene->mutex.unlock();
 }

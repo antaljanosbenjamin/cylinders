@@ -24,7 +24,7 @@
 #include <GL/freeglut.h>	// must be downloaded unless you have an Apple
 #include "MathUtils/Matrix.h"
 #include "Materials/Color.h"
-#include "Scene.h"
+#include "Utils/Scene.h"
 
 #endif
 
@@ -164,7 +164,7 @@ void onInitialization() {
     Vector eye( 0, 15, 29 );
     Vector lookat( 0, 11, 20 );
     Camera cam = Camera( eye, lookat, Vector( 0, 1, -1 ), Number((int) windowWidth ), Number((int) windowHeight ));
-    Scene s = Scene( cam, windowWidth, windowHeight, background );
+    Scene s( cam, windowWidth, windowHeight, background );
     s.build();
     s.render();
 

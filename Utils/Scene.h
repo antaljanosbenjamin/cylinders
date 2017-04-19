@@ -6,15 +6,16 @@
 #define CYLINDERS_SCENE_H
 
 #include <random>
+#include <mutex>
 
 
-#include "CameraUtils/Camera.h"
-#include "Lights/AmbientLight.h"
-#include "Objects/Object.h"
-#include "Materials/Material.h"
-#include "Objects/Plane.h"
-#include "Materials/TableMaterial.h"
-#include "Objects/InfiniteCylinder.h"
+#include "../CameraUtils/Camera.h"
+#include "../Lights/AmbientLight.h"
+#include "../Objects/Object.h"
+#include "../Materials/Material.h"
+#include "../Objects/Plane.h"
+#include "../Materials/TableMaterial.h"
+#include "../Objects/InfiniteCylinder.h"
 
 class Scene {
 protected:
@@ -24,6 +25,9 @@ protected:
     Color *image;
     int screenWidth;
     int screenHeight;
+
+    std::mutex mutex;
+    int nextPixelNumber;
 
     static int TRACE_DEPTH;
 
@@ -57,6 +61,8 @@ private:
     bool  needSmoothing( int xPos, int yPos );
 
     Color getSmoothedColor( int xPos, int yPos );
+
+    static void renderTask( Scene* scene);
 
 };
 

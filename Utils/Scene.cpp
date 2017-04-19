@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <thread>
+#include <cstring>
 #include "Scene.h"
 #include "../Lights/PointLight.h"
 
@@ -32,12 +33,22 @@ void Scene::addLight( Light *light ) {
 
 void Scene::render() {
     std::thread threads[4];
-    // spawn 10 threads:
     for( int i = 0; i < 4; ++i )
         threads[i] = std::thread( Scene::renderTask, this );
 
     for( auto &th : threads ) th.join();
-    smoothOutEdges();
+
+    nextPixelNumber = 0;
+    Color *targetImage = new Color[screenWidth * screenHeight];
+
+    for( int i = 0; i < 4; ++i )
+        threads[i] = std::thread( Scene::smoothTask, this, targetImage );
+
+    for( auto &th : threads ) th.join();
+
+    std::memcpy( image, targetImage, screenWidth * screenHeight );
+
+    delete[] targetImage;
 }
 
 RayHit Scene::intersectAll( Ray &r ) {
@@ -237,6 +248,10 @@ void Scene::smoothOutEdges() {
 
 
 bool Scene::needSmoothing( int xPos, int yPos ) {
+
+    if( xPos == 0 || xPos == screenWidth - 1 || yPos == 0 || yPos == screenHeight - 1 )
+        return false;
+
     Color c1 = image[yPos * screenWidth + xPos];
     Color c2 = image[( yPos + 1 ) * screenWidth + xPos];
     Color c3 = image[yPos * screenWidth + xPos + 1];
@@ -245,8 +260,8 @@ bool Scene::needSmoothing( int xPos, int yPos ) {
     Color sum = c1 + c2 + c3 + c4;
     Color average = sum / 4;
 
-//    if( c1 < average / 2 || c1 > average * 2 )
-//        return true;
+    if( c1 < average / 2 || c1 > average * 2 )
+        return true;
 
     return false;
 }
@@ -268,7 +283,7 @@ Color Scene::getSmoothedColor( int xPos, int yPos ) {
     return sum / ( antialiasing * antialiasing );
 }
 
-void Scene::renderTask(Scene *scene) {
+void Scene::renderTask( Scene *scene ) {
     scene->mutex.lock();
     while( scene->nextPixelNumber < scene->screenWidth * scene->screenWidth ){
         int myNextPixelNumber = scene->nextPixelNumber++;
@@ -278,6 +293,24 @@ void Scene::renderTask(Scene *scene) {
 
         Ray ray = scene->cam.getRay( xPos, yPos );
         scene->image[yPos * scene->screenWidth + xPos] = scene->trace( ray, 0 );
+
+        scene->mutex.lock();
+    }
+    scene->mutex.unlock();
+}
+
+void Scene::smoothTask( Scene *scene, Color *targetImage ) {
+    scene->mutex.lock();
+    while( scene->nextPixelNumber < scene->screenWidth * scene->screenWidth ){
+        int myNextPixelNumber = scene->nextPixelNumber++;
+        scene->mutex.unlock();
+        int yPos = myNextPixelNumber / scene->screenWidth;
+        int xPos = myNextPixelNumber % scene->screenWidth;
+
+        if( scene->needSmoothing( xPos, yPos ))
+            targetImage[yPos * scene->screenWidth + xPos] = scene->getSmoothedColor( xPos, yPos );
+        else
+            targetImage[yPos * scene->screenWidth + xPos] = scene->image[yPos * scene->screenWidth + xPos];
 
         scene->mutex.lock();
     }

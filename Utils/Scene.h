@@ -23,8 +23,8 @@ protected:
 
     AmbientLight ambientLight;
     Color *image;
-    int screenWidth;
-    int screenHeight;
+    const int screenWidth;
+    const int screenHeight;
 
     std::mutex mutex;
     int nextPixelNumber;
@@ -58,11 +58,13 @@ private:
 
     void smoothOutEdges();
 
-    bool  needSmoothing( int xPos, int yPos );
+    bool needSmoothing( int xPos, int yPos );
 
     Color getSmoothedColor( int xPos, int yPos );
 
-    static void renderTask( Scene* scene);
+    static void renderTask( Scene *scene );
+
+    static void smoothTask( Scene *scene, Color *targetImage );
 
 };
 

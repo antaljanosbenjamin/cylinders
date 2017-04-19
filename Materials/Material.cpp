@@ -18,8 +18,8 @@ Color  Material::makeF0( Color &colorN, Color &colorK ) {
 }
 
 Color Material::Fresnel( Vector view, Vector normal ) {
-    Number cosa = Number( fabs( normal * view ) );
-    return F0 + ( Color( 1.0f, 1.0f, 1.0f ) - F0 ) * pow( 1 - cosa, 5 );
+    Number cosa ( nabs( normal * view ) );
+    return F0 + ( Color( 1.0f, 1.0f, 1.0f ) - F0 ) * pow( 1 - cosa.value, 5 );
 }
 
 bool Material::isReflective() {
@@ -51,7 +51,7 @@ bool Material::refract( Vector view, Vector normal, Vector &refractedRay ) {
     }
     Number disc = 1 - ( 1 - cosa * cosa ) / cn / cn;
     if( disc < 0 ) return false;
-    refractedRay = ( view / cn + normal * ( cosa / cn - sqrt( disc ))).getNormalized();
+    refractedRay = ( view / cn + normal * ( cosa / cn - nsqrt( disc ))).getNormalized();
 
     return true;
 }

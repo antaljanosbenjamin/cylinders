@@ -62,8 +62,8 @@ void Object::setScale( Number scaleX, Number scaleY, Number scaleZ ) {
 }
 
 void Object::setRotateX( Number fi ) {
-    Number cosfi( cos( fi ));
-    Number sinfi( sin( fi ));
+    Number cosfi( ncos( fi ));
+    Number sinfi( nsin( fi ));
     Matrix rotateMatrix;
     rotateMatrix.loadIdentity();
     rotateMatrix.matrix[1][1] = rotateMatrix.matrix[2][2] = cosfi;
@@ -71,7 +71,7 @@ void Object::setRotateX( Number fi ) {
     rotateMatrix.matrix[1][2] = sinfi;
     transform = transform * rotateMatrix;
     rotate = rotateMatrix;
-    rotateMatrix.matrix[1][1] = rotateMatrix.matrix[2][2] = cos( -fi );
+    rotateMatrix.matrix[1][1] = rotateMatrix.matrix[2][2] = ncos( -fi );
     rotateMatrix.matrix[1][2] = -sinfi;
     rotateMatrix.matrix[2][1] = sinfi;
     inverseRotate = rotateMatrix;
@@ -79,8 +79,8 @@ void Object::setRotateX( Number fi ) {
 }
 
 void Object::setRotateY( Number fi ) {
-    Number cosfi( cos( fi ));
-    Number sinfi( sin( fi ));
+    Number cosfi( ncos( fi ));
+    Number sinfi( nsin( fi ));
     Matrix rotateMatrix;
     rotateMatrix.loadIdentity();
     rotateMatrix.matrix[0][0] = rotateMatrix.matrix[2][2] = cosfi;
@@ -88,7 +88,7 @@ void Object::setRotateY( Number fi ) {
     rotateMatrix.matrix[2][0] = sinfi;
     transform = transform * rotateMatrix;
     rotate = rotateMatrix;
-    rotateMatrix.matrix[0][0] = rotateMatrix.matrix[2][2] = cos( -fi );
+    rotateMatrix.matrix[0][0] = rotateMatrix.matrix[2][2] = ncos( -fi );
     rotateMatrix.matrix[2][0] = -sinfi;
     rotateMatrix.matrix[0][2] = sinfi;
     inverseRotate = rotateMatrix;
@@ -96,8 +96,8 @@ void Object::setRotateY( Number fi ) {
 }
 
 void Object::setRotateZ( Number fi ) {
-    Number cosfi( cos( fi ));
-    Number sinfi( sin( fi ));
+    Number cosfi( ncos( fi ));
+    Number sinfi( nsin( fi ));
     Matrix rotateMatrix;
     rotateMatrix.loadIdentity();
     rotateMatrix.matrix[0][0] = rotateMatrix.matrix[1][1] = cosfi;
@@ -105,7 +105,7 @@ void Object::setRotateZ( Number fi ) {
     rotateMatrix.matrix[0][1] = sinfi;
     transform = transform * rotateMatrix;
     rotate = rotateMatrix;
-    rotateMatrix.matrix[0][0] = rotateMatrix.matrix[1][1] = cos( -fi );
+    rotateMatrix.matrix[0][0] = rotateMatrix.matrix[1][1] = ncos( -fi );
     rotateMatrix.matrix[0][1] = -sinfi;
     rotateMatrix.matrix[1][0] = sinfi;
     inverseRotate = rotateMatrix;
@@ -135,7 +135,7 @@ void Object::setShift( Vector pos ) {
 }
 
 void Object::setNewBasesAndOrigo( Vector &newY, Vector &newOrigo ) {
-    Vector newX = newY.rotateByZ( M_PI / 2 );
+    Vector newX = newY.rotateByZ( Number( M_PI / 2 ) );
     Vector newZ = newX % newY;
     newX = newX.getNormalized();
     newY = newY.getNormalized();

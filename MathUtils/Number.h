@@ -13,30 +13,32 @@ struct Number {
 
     Number();
 
-    Number( const int &intValue );
+    explicit Number( const int &intValue );
 
-    Number( const float &floatValue );
+    explicit Number( const float &floatValue );
 
-    Number( const double &doubleValue );
+    explicit Number( const double &doubleValue );
 
     // Number operators
-    bool operator==( const Number &other );
+    bool operator==( const Number &other ) const;
 
-    bool operator>( const Number &other );
+    bool operator!=( const Number &other ) const;
 
-    bool operator<( const Number &other );
+    bool operator>( const Number &other ) const;
 
-    bool operator>=( const Number &other );
+    bool operator<( const Number &other ) const;
 
-    bool operator<=( const Number &other );
+    bool operator>=( const Number &other ) const;
 
-    Number operator+( const Number &other );
+    bool operator<=( const Number &other ) const;
 
-    Number operator-( const Number &other );
+    Number operator+( const Number &other ) const;
 
-    Number operator*( const Number &other );
+    Number operator-( const Number &other ) const;
 
-    Number operator/( const Number &other );
+    Number operator*( const Number &other ) const;
+
+    Number operator/( const Number &other ) const;
 
     Number &operator+=( const Number &other );
 
@@ -46,27 +48,28 @@ struct Number {
 
     Number &operator/=( const Number &other );
 
-    // int operators
-    int operator=( const int &intValue );
+    Number operator-() const;
 
-    bool operator==( const int &intValue );
-
-    bool operator>( const int &intValue );
-
-    bool operator<( const int &intValue );
-
-    bool operator>=( const int &intValue );
-
-    bool operator<=( const int &intValue );
-    
     // double operators
-    Number operator+( const double &doubleValue );
+    bool operator==( const double &doubleValue ) const;
 
-    Number operator-( const double &doubleValue );
+    bool operator!=( const double &doubleValue ) const;
 
-    Number operator*( const double &doubleValue );
+    bool operator>( const double &doubleValue ) const;
 
-    Number operator/( const double &doubleValue );
+    bool operator<( const double &doubleValue ) const;
+
+    bool operator>=( const double &doubleValue ) const;
+
+    bool operator<=( const double &doubleValue ) const;
+    
+    Number operator+( const double &doubleValue ) const;
+
+    Number operator-( const double &doubleValue ) const;
+
+    Number operator*( const double &doubleValue ) const;
+
+    Number operator/( const double &doubleValue ) const;
 
     Number &operator+=( const double &doubleValue );
 
@@ -75,17 +78,39 @@ struct Number {
     Number &operator*=( const double &doubleValue );
 
     Number &operator/=( const double &doubleValue );
-    
-    
-    float operator=( const float &floatValue );
 
     double operator=( const double &doubleValue );
 
-    operator float() const;
+    // Aritmetic function
+    static Number pow( const Number base, const Number exponent );
+
+    static Number pow( const Number base, const float exponent );
+
+    static Number sqrt( const Number x );
+
+    static Number abs( const Number x );
+
+    static Number cos( const Number x );
+
+    static Number sin( const Number x );
+
+#define nsqrt( X ) Number::sqrt( X )
+#define npow( BASE, EXPONENT ) Number::pow( BASE, EXPONENT )
+#define nabs( X ) Number::abs( X )
+#define ncos( X ) Number::cos( X )
+#define nsin( X ) Number::sin( X )
+
 
 private:
-    static constexpr NumberValue EPSZILON = 0.0025f;
+    static constexpr NumberValue EPSZILON = 0.000025f;
 };
+// double operators
+Number operator+( const double &lhs, const Number &rhs );
 
+Number operator-( const double &lhs, const Number &rhs );
+
+Number operator*( const double &lhs, const Number &rhs );
+
+Number operator/( const double &lhs, const Number &rhs );
 
 #endif //CYLINDERS_NUMBER_H

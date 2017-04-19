@@ -3,6 +3,7 @@
 //
 
 #include "Number.h"
+#include <cmath>
 
 Number::Number()
         : value( 0.0f ) {}
@@ -17,39 +18,43 @@ Number::Number( const double &doubleValue )
         : value( doubleValue ) {}
 
 // Number operators
-bool Number::operator==( const Number &other ) {
+bool Number::operator==( const Number &other ) const {
     return ( value < other.value + EPSZILON && value > other.value - EPSZILON );
 }
 
-bool Number::operator>( const Number &other ) {
+bool Number::operator!=( const Number &other ) const {
+    return !( *this == other );
+}
+
+bool Number::operator>( const Number &other ) const {
     return value >= other.value + EPSZILON;
 }
 
-bool Number::operator<( const Number &other ) {
+bool Number::operator<( const Number &other ) const {
     return value <= other.value - EPSZILON;
 }
 
-bool Number::operator>=( const Number &other ) {
+bool Number::operator>=( const Number &other ) const {
     return !operator<( other );
 }
 
-bool Number::operator<=( const Number &other ) {
+bool Number::operator<=( const Number &other ) const {
     return !operator>( other );
 }
 
-Number Number::operator+( const Number &other ) {
+Number Number::operator+( const Number &other ) const {
     return Number( value + other.value );
 }
 
-Number Number::operator-( const Number &other ) {
+Number Number::operator-( const Number &other ) const {
     return Number( value - other.value );
 }
 
-Number Number::operator*( const Number &other ) {
+Number Number::operator*( const Number &other ) const {
     return Number( value * other.value );
 }
 
-Number Number::operator/( const Number &other ) {
+Number Number::operator/( const Number &other ) const {
     return Number( value / other.value );
 }
 
@@ -73,81 +78,110 @@ Number &Number::operator/=( const Number &other ) {
     return ( *this );
 }
 
-
-// int operators
-bool Number::operator==( const int &intValue ) {
-    return ( value < intValue + EPSZILON && value > intValue - EPSZILON );
-}
-
-bool Number::operator>( const int &intValue ) {
-    return value >= intValue + EPSZILON;
-}
-
-bool Number::operator<( const int &intValue ) {
-    return value <= intValue - EPSZILON;
-}
-
-bool Number::operator>=( const int &intValue ) {
-    return !operator<( intValue );
-}
-
-bool Number::operator<=( const int &intValue ) {
-    return !operator>( intValue );
-}
-
-int Number::operator=( const int &intValue ) {
-    value = intValue;
-    return intValue;
+Number Number::operator-() const {
+    return Number( -value );
 }
 
 // double operators
-Number Number::operator+( const double &doubleValue ) {
-    return Number( value + doubleValue );
+bool Number::operator==( const double &doubleValue ) const {
+    return *this == Number( doubleValue );
 }
 
-Number Number::operator-( const double &doubleValue ) {
-    return Number( value - doubleValue );
+bool Number::operator!=( const double &doubleValue ) const {
+    return *this != Number( doubleValue );
 }
 
-Number Number::operator*( const double &doubleValue ) {
-    return Number( value * doubleValue );
+bool Number::operator>( const double &doubleValue ) const {
+    return *this > Number( doubleValue );
 }
 
-Number Number::operator/( const double &doubleValue ) {
-    return Number( value / doubleValue );
+bool Number::operator<( const double &doubleValue ) const {
+    return *this < Number( doubleValue );
+}
+
+bool Number::operator>=( const double &doubleValue ) const {
+    return *this >= Number( doubleValue );
+}
+
+bool Number::operator<=( const double &doubleValue ) const {
+    return *this <= Number( doubleValue );
+}
+
+
+Number Number::operator+( const double &doubleValue ) const {
+    return *this + Number ( doubleValue );
+}
+
+Number Number::operator-( const double &doubleValue ) const {
+    return *this - Number ( doubleValue );
+}
+
+Number Number::operator*( const double &doubleValue ) const {
+    return *this * Number ( doubleValue );
+}
+
+Number Number::operator/( const double &doubleValue ) const {
+    return *this / Number ( doubleValue );
 }
 
 Number &Number::operator+=( const double &doubleValue ) {
-    value += doubleValue;
-    return ( *this );
+    return *this += Number ( doubleValue );
 }
 
 Number &Number::operator-=( const double &doubleValue ) {
-    value -= doubleValue;
-    return ( *this );
+    return *this -= Number ( doubleValue );
 }
 
 Number &Number::operator*=( const double &doubleValue ) {
-    value *= doubleValue;
-    return ( *this );
+    return *this *= Number ( doubleValue );
 }
 
 Number &Number::operator/=( const double &doubleValue ) {
-    value /= doubleValue;
-    return ( *this );
-}
-
-
-float Number::operator=( const float &floatValue ) {
-    value = floatValue;
-    return floatValue;
+    return *this /= Number ( doubleValue );
 }
 
 double Number::operator=( const double &doubleValue ) {
-    value = doubleValue;
+    *this = Number ( doubleValue );
     return doubleValue;
 }
 
-Number::operator float() const {
-    return value;
+Number Number::pow( const Number base, const Number exponent ) {
+    return Number( std::pow( base.value, exponent.value ));
+}
+
+Number Number::pow( const Number base, const float exponent ) {
+    return Number( std::pow( base.value, exponent ));
+}
+
+Number Number::sqrt( const Number x ) {
+    return Number( std::sqrt( x.value ));
+}
+
+Number Number::abs( const Number x ) {
+    return Number( fabs( x.value ));
+}
+
+Number Number::sin( const Number x ) {
+    return Number( std::sin( x.value ));
+}
+
+Number Number::cos( const Number x ) {
+    return Number( std::cos( x.value ));
+}
+
+// double operators
+Number operator+( const double &lhs, const Number &rhs ) {
+    return Number( lhs ) + rhs;
+}
+
+Number operator-( const double &lhs, const Number &rhs ) {
+    return Number( lhs ) - rhs;
+}
+
+Number operator*( const double &lhs, const Number &rhs ) {
+    return Number( lhs ) * rhs;
+}
+
+Number operator/( const double &lhs, const Number &rhs ) {
+    return Number( lhs ) / rhs;
 }

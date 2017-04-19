@@ -24,7 +24,7 @@ Vector Plane::getNormalAtPoint( Vector &intersectPoint ) {
 ObjectPosition Plane::getPositionByUV( Number u, Number v ) {
     u -= 0.5f;
     v -= 0.5f;
-    Vector origo( u * width, 0, v * depth );
+    Vector origo( u * width, Number( 0 ), v * depth );
     Vector normal( 0.0f, 1.0f, 0.0f );
     ObjectPosition op( origo, normal );
     return convertPositionToWordCoords( op );
@@ -32,7 +32,7 @@ ObjectPosition Plane::getPositionByUV( Number u, Number v ) {
 
 // Object koordinátákban kapja meg
 bool Plane::planeContains( Vector v ) {
-    if( v * normal == 0.0f && abs( v.getZ()) <= depthPer2 && abs( v.getX()) <= widthPer2 )
+    if( v * normal == 0.0f && nabs( v.getZ()) <= depthPer2 && nabs( v.getX()) <= widthPer2 )
         return true;
     else return false;
 }
@@ -46,5 +46,5 @@ Number Plane::intersect( Ray &r, RayHit &hit ) {
             return tNew;
     }
 
-    return -1.0;
+    return Number( -1.0 );
 }

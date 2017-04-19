@@ -12,43 +12,66 @@ struct Color {
         r = g = b = 0;
     }
 
-    Color( Number r0, Number g0, Number b0 ) {
-        r = r0;
-        g = g0;
-        b = b0;
+    Color( Number r0, Number g0, Number b0 )
+            : r( r0 ), g( g0 ), b( b0 ) {
     }
 
-    Color operator*( Number a ) {
-        return Color( r * a, g * a, b * a );
+    Color( float r0, float g0, float b0 )
+            : r( r0 ), g( g0 ), b( b0 ) {
     }
+
+    // Color operators
 
     Color operator*( const Color &c ) {
         return Color( r * c.r, g * c.g, b * c.b );
-    }
-
-    Color operator/( Number a ) {
-        return Color( r / a, g / a, b / a );
     }
 
     Color operator/( const Color &c ) {
         return Color( r / c.r, g / c.g, b / c.b );
     }
 
-    Color operator+( Number a ) {
-        return Color( r + a, g + a, b + a );
-    }
-
     Color operator+( const Color &c ) {
         return Color( r + c.r, g + c.g, b + c.b );
-    }
-
-    Color operator-( Number a ) {
-        return Color( r - a, g - a, b - a );
     }
 
     Color operator-( const Color &c ) {
         return Color( r - c.r, g - c.g, b - c.b );
     }
+
+    // Number operators
+    Color operator*( const Number &a ) {
+        return Color( r * a, g * a, b * a );
+    }
+
+    Color operator/( const Number &a ) {
+        return Color( r / a, g / a, b / a );
+    }
+
+    Color operator+( const Number &a ) {
+        return Color( r + a, g + a, b + a );
+    }
+
+    Color operator-( const Number &a ) {
+        return Color( r - a, g - a, b - a );
+    }
+
+    // float operators
+    Color operator/( const double &doubleValue ) {
+        return *this / Number( doubleValue );
+    }
+
+    Color operator*( const double &doubleValue ) {
+        return *this * Number( doubleValue );
+    }
+
+    Color operator+( const double &doubleValue ) {
+        return *this + Number( doubleValue );
+    }
+
+    Color operator-( const double &doubleValue ) {
+        return *this - Number( doubleValue );
+    }
+
 
     Number getMaxIntensity() {
         if( r >= g ){

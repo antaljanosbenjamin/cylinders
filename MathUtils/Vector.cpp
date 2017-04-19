@@ -9,58 +9,69 @@ Vector::Vector() {
     m_x = m_y = m_z = 0;
 }
 
-Vector::Vector( Number x0, Number y0, Number z0 )
+Vector::Vector( const Number x0, const Number y0, const Number z0 )
         : m_x( x0 ), m_y( y0 ), m_z( z0 ) {};
 
-Vector Vector::operator*( const Number &a ) {
-    return Vector( m_x * a, m_y * a, m_z * a );
-}
+Vector::Vector( const double x0, const double y0, const double z0 )
+        : m_x( x0 ), m_y( y0 ), m_z( z0 ) {};
 
-Vector Vector::operator+( const Vector &v ) {
+Vector Vector::operator+( const Vector &v ) const {
     return Vector( m_x + v.m_x, m_y + v.m_y, m_z + v.m_z );
 }
 
-Vector Vector::operator-( const Vector &v ) {
+Vector Vector::operator-( const Vector &v ) const {
     return Vector( m_x - v.m_x, m_y - v.m_y, m_z - v.m_z );
 }
 
-Number Vector::operator*( const Vector &v ) {    // dot product
+Number Vector::operator*( const Vector &v ) const {    // dot product
     return ( m_x * v.m_x + m_y * v.m_y + m_z * v.m_z );
 }
 
-Vector Vector::operator/( Number a ) {
-    return Vector( m_x / a, m_y / a, m_z / a );
-}
-
-Vector Vector::operator%( const Vector v ) {    // cross product
+Vector Vector::operator%( const Vector &v ) const {    // cross product
     return Vector( m_y * v.m_z - m_z * v.m_y, m_z * v.m_x - m_x * v.m_z, m_x * v.m_y - m_y * v.m_x );
 }
 
 // cos+
-Number Vector::operator&( const Vector v ) {
+Number Vector::operator&( const Vector &v ) const {
     Number ret = operator*( v );
-    if( ret < 0 )
-        return 0;
+    if( ret < 0.0 )
+        return Number( 0 );
     else
         return ret;
 }
 
-Number Vector::length() { return sqrt( m_x * m_x + m_y * m_y + m_z * m_z ); };
+Vector Vector::operator*( const Number &number ) const {
+    return Vector( m_x * number, m_y * number, m_z * number );
+}
 
-Number Vector::getDistance( Vector v ) {
-    return pow(( pow( m_x - v.m_x, 2 ) + pow( m_y - v.m_y, 2 ) + pow( m_z - v.m_z, 2 )), 0.5f );
+Vector Vector::operator/( const Number &number ) const {
+    return Vector( m_x / number, m_y / number, m_z / number );
+}
+
+Vector Vector::operator*( const double &doubleValue ) const {
+    return *this * Number( doubleValue );
+}
+
+Vector Vector::operator/( const double &doubleValue ) const {
+    return *this / Number( doubleValue );
+}
+
+Number Vector::length() const { return nsqrt( m_x * m_x + m_y * m_y + m_z * m_z ); };
+
+Number Vector::getDistance( const Vector &v ) const {
+    return npow(( npow( m_x - v.m_x, 2 ) + npow( m_y - v.m_y, 2 ) + npow( m_z - v.m_z, 2 )), 0.5f );
 };
 
-Vector Vector::getNormalized() {
+Vector Vector::getNormalized() const {
     return ( *this ) / this->length();
 };
 
 Vector Vector::rotateByZ( Number fi ) {
-    return Vector( m_x * cos( fi ) - m_y * sin( fi ), m_x * sin( fi ) + m_y * cos( fi ), 0.0f );
+    return Vector( m_x * ncos( fi ) - m_y * nsin( fi ), m_x * nsin( fi ) + m_y * ncos( fi ), Number( 0 ) );
 };
 
 Vector Vector::rotateByY( Number fi ) {
-    return Vector( m_z * sin( fi ) + m_x * cos( fi ), m_y, m_z * cos( fi ) - m_x * sin( fi ));
+    return Vector( m_z * nsin( fi ) + m_x * ncos( fi ), m_y, m_z * ncos( fi ) - m_x * nsin( fi ));
 }
 
 const Number &Vector::getX() const {
@@ -89,4 +100,8 @@ void Vector::setZ( const Number &z ) {
 
 Vector operator*( const Number &s, const Vector &v ) {
     return Vector( v.m_x * s, v.m_y * s, v.m_z * s );
+}
+
+Vector operator*( const double &s, const Vector &v ) {
+    return v * Number( s );
 }

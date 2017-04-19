@@ -10,8 +10,8 @@ TableMaterial::TableMaterial( Number n_init, Number shine_init, Color F0_init, C
 };
 
 Color TableMaterial::getKA( Vector &v ) {
-    int x = (int) abs( v.getX() / 4 );
-    int z = (int) abs( v.getZ() / 4 );
+    int x = abs( v.getX().value / 4 );
+    int z = abs( v.getZ().value / 4 );
     if( v.getX() < 0.0f )
         x++;
     if( v.getZ() < 0.0f )

@@ -28,7 +28,7 @@ public:
     }
 
     Number getDistance( Vector &targetPoint ) {
-        return 0;
+        return Number( 0 );
     }
 
     Light *clone() {

@@ -17,7 +17,7 @@ struct Camera {
 
     void setNewEyeAndLookat( const Vector &e, const Vector &l, const Vector &u );
 
-    Ray getRay( Number xPos, Number yPos );
+    Ray getRay( int xPos, int yPos );
 };
 
 #endif //CYLINDERS_CAMERA_H

@@ -17,7 +17,7 @@ struct Ray {
 };
 
 struct RayHit {
-    Object *hittedObject;
+    std::shared_ptr<Object> hittedObject;
     Number hittingTime;
     Vector intersectPoint
 

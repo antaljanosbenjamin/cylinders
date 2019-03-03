@@ -36,15 +36,13 @@ public:
 
     ~Scene();
 
-    int lightsNum;
-    Light *lights[3];
+    std::vector<std::shared_ptr<Light>> lights;
 
-    int objectsNum;
-    Object *objects[100];
+    std::vector<std::shared_ptr<Object>> objects;
 
-    void addObject( Object *obj );
+    void addObject( std::shared_ptr<Object> object );
 
-    void addLight( Light *light );
+    void addLight( std::shared_ptr<Light> light );
 
     void render();
 

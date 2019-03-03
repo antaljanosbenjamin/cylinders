@@ -11,24 +11,18 @@
 int Scene::TRACE_DEPTH = 5;
 
 Scene::Scene( Camera cam_init, int screenW, int screenH, Color *img )
-        : cam( cam_init ), screenWidth( screenW ), screenHeight( screenH ), mutex(), nextPixelNumber( 0 ), image( img ), lightsNum( 0 ), objectsNum( 0 ) {
+        : cam( cam_init ), screenWidth( screenW ), screenHeight( screenH ), mutex(), nextPixelNumber( 0 ), image( img ) {
 }
 
 Scene::~Scene() {
-    for( int i = 0; i < objectsNum; i++ ){
-        delete objects[i];
-    }
-    for( int i = 0; i < lightsNum; i++ ){
-        delete lights[i];
-    }
 }
 
-void Scene::addObject( Object *obj ) {
-    objects[objectsNum++] = obj;
+void Scene::addObject( std::shared_ptr<Object> object  ) {
+    objects.emplace_back(std::move(object));
 }
 
-void Scene::addLight( Light *light ) {
-    lights[lightsNum++] = light;
+void Scene::addLight( std::shared_ptr<Light> light ) {
+    lights.emplace_back(std::move(light));
 }
 
 void Scene::render() {
@@ -54,10 +48,10 @@ void Scene::render() {
 RayHit Scene::intersectAll( Ray &r ) {
     RayHit hit;
     hit.hittingTime = -1.0f;
-    for( int i = 0; i < objectsNum; i++ ){
-        Number tNew = objects[i]->intersect( r, hit );
+    for( const auto& object : objects ){
+        Number tNew = object->intersect( r, hit );
         if( tNew >= 0 && ( tNew < hit.hittingTime || hit.hittingTime < 0 )){
-            hit.hittedObject = objects[i];
+            hit.hittedObject = object;
             hit.hittingTime = tNew;
         }
     }
@@ -82,13 +76,13 @@ Color Scene::trace( Ray &r, int d ) {
             //return Color(0, 1, 0);
             Color ka = hit.hittedObject->getKA( hit.intersectPoint );
             ret = ka * ambientLight.Lout;
-            for( int i = 0; i < lightsNum; i++ ){
-                Vector shadowDir(( lights[i]->getDirection( hit.intersectPoint )));
+            for( const auto& light : lights ){
+                Vector shadowDir(( light->getDirection( hit.intersectPoint )));
                 Ray shadowRay( hit.intersectPoint + shadowDir.getNormalized() * 0.01f, shadowDir );
                 RayHit shadowHit = intersectAll( shadowRay );
                 if( shadowHit.hittingTime.value < 0.0f ||
-                    ( shadowHit.hittingTime * shadowRay.direction ).length() >= lights[i]->getDistance( hit.intersectPoint )){
-                    Color intensity = lights[i]->getIntensity( hit.intersectPoint );
+                    ( shadowHit.hittingTime * shadowRay.direction ).length() >= light->getDistance( hit.intersectPoint )){
+                    Color intensity = light->getIntensity( hit.intersectPoint );
                     Color kd = hit.hittedObject->getKD( hit.intersectPoint );
                     Color ks = hit.hittedObject->getKS();
                     Number shine = hit.hittedObject->getShininess();
@@ -182,16 +176,16 @@ void Scene::build() {
     Color goldF0 = Material::makeF0( goldN, goldK );
     Material *gold = new Material( Number( 0 ), Number( 0 ), goldF0, Color( 0, 0, 0 ), Color( 0, 0, 0 ), REFLECTIVE );
 
-    Plane *bottom = new Plane( squared, Number( 100 ), Number( 100 ));
-    addObject( bottom );
+    std::shared_ptr<Plane> bottom = std::make_shared<Plane>( squared, Number( 100 ), Number( 100 ));
+    addObject( std::move(bottom) );
 
-    Plane *top = new Plane( diagonal, Number( 100 ), Number( 100 ));
+    std::shared_ptr<Plane> top = std::make_shared<Plane>( diagonal, Number( 100 ), Number( 100 ));
     top->setRotateZ( Number( M_PI ));
     top->setShift( Vector( 0, 25, 0 ));
-    addObject( top );
+    addObject( std::move(top) );
 
-    InfiniteCylinder *roomCylinder = new InfiniteCylinder( gold, Number( 30 ));
-    addObject( roomCylinder );
+    std::shared_ptr<InfiniteCylinder> roomCylinder = std::make_shared<InfiniteCylinder>( gold, Number( 30 ));
+    addObject( std::move(roomCylinder) );
 
     /// Glass cylinder
     Color glassN = Color( 1.5f, 1.5f, 1.5f );
@@ -199,9 +193,9 @@ void Scene::build() {
     Color glassF0 = Material::makeF0( glassN, glassK );
     Material *glass = new Material( Number( 1.5f ), Number( 0 ), glassF0, Color( 0, 0, 0 ), Color( 0, 0, 0 ), REFRACTIVE );
 
-    InfiniteCylinder *glassCylinder = new InfiniteCylinder( glass, Number( 3 ));
+    std::shared_ptr<InfiniteCylinder> glassCylinder = std::make_shared<InfiniteCylinder>( glass, Number( 3 ));
     glassCylinder->setRotateZ( Number( M_PI / 6 ));
-    addObject( glassCylinder );
+    addObject( std::move(glassCylinder) );
 
     /// Silver cylinder
     Color silverN = Color( 0.14f, 0.16f, 0.13f );
@@ -209,10 +203,10 @@ void Scene::build() {
     Color silverF0 = Material::makeF0( silverN, silverK );
     Material *silver = new Material( Number( 0 ), Number( 0 ), silverF0, Color( 0, 0, 0 ), Color( 0, 0, 0 ), REFLECTIVE );
 
-    InfiniteCylinder *silverCylinder = new InfiniteCylinder( silver, Number( 4 ));
+    std::shared_ptr<InfiniteCylinder> silverCylinder = std::make_shared<InfiniteCylinder>( silver, Number( 4 ));
     silverCylinder->setRotateZ( Number( -M_PI / 7 ));
     silverCylinder->setShift( Vector( 15, 5, 10 ));
-    addObject( silverCylinder );
+    addObject( std::move(silverCylinder) );
 
     /// Textured cylinder
     KDFunction cylinderKD = []( const Vector &v ) {
@@ -223,18 +217,18 @@ void Scene::build() {
     Material *cylinderMaterial = new TableMaterial( Number( 0 ), Number( 5 ), Color( 0.0f, 0.0f, 0.0f ), Color( 1.0f, 0.3f, 0.3f ) / 2, Color( 0.3, 0.3, 0.3 ),
                                                     ROUGH, cylinderKD, cylinderKD );
 
-    InfiniteCylinder *texturedCylinder = new InfiniteCylinder( cylinderMaterial, Number( 3 ));
+    std::shared_ptr<InfiniteCylinder> texturedCylinder = std::make_shared<InfiniteCylinder>( cylinderMaterial, Number( 3 ));
     texturedCylinder->setRotateX( Number(( M_PI / 6 ) * 5 ));
     texturedCylinder->setRotateY( Number(( M_PI / 6 ) * 4 ));
     texturedCylinder->setShift( Vector( -10, 0, 2 ));
-    addObject( texturedCylinder );
+    addObject( std::move(texturedCylinder) );
 
     /// Point lights
-    PointLight *blueLight = new PointLight( Vector( 10, 10, 10 ), Color( 0, 0, 50 ));
-    addLight( blueLight );
+    std::shared_ptr<PointLight> blueLight = std::make_shared<PointLight>( Vector( 10, 10, 10 ), Color( 0, 0, 50 ));
+    addLight( std::move(blueLight) );
 
-    PointLight *redLight = new PointLight( Vector( -5, 20, 15 ), Color( 50, 0, 0 ));
-    addLight( redLight );
+     std::shared_ptr<PointLight> redLight = std::make_shared<PointLight>( Vector( -5, 20, 15 ), Color( 50, 0, 0 ));
+    addLight( std::move(redLight) );
 }
 
 void Scene::smoothOutEdges() {

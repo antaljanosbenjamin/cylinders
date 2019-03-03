@@ -28,3 +28,10 @@
 *.app
 
 \.idea/
+\.vscode/
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+cylinders
+Makefile

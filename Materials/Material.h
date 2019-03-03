@@ -1,10 +1,4 @@
-//
-// Created by kovi on 4/16/17.
-//
-
-#ifndef CYLINDERS_MATERIAL_H
-#define CYLINDERS_MATERIAL_H
-
+#pragma once
 
 #include "../MathUtils/Vector.h"
 #include "Color.h"
@@ -52,6 +46,3 @@ public:
 
     virtual Number getShineness();
 };
-
-
-#endif //CYLINDERS_MATERIAL_H

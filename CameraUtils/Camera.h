@@ -1,9 +1,4 @@
-//
-// Created by kovi on 4/16/17.
-//
-
-#ifndef CYLINDERS_CAMERA_H
-#define CYLINDERS_CAMERA_H
+#pragma once
 
 #include "../MathUtils/Vector.h"
 #include "Ray.h"
@@ -19,5 +14,3 @@ struct Camera {
 
     Ray getRay( double xPos, double yPos );
 };
-
-#endif //CYLINDERS_CAMERA_H

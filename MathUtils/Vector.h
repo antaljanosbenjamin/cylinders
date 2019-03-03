@@ -1,9 +1,4 @@
-//
-// Created by kovi on 4/16/17.
-//
-
-#ifndef CYLINDERS_VECTOR_H
-#define CYLINDERS_VECTOR_H
+#pragma once
 
 #include "Number.h"
 #include <cmath>
@@ -65,6 +60,3 @@ struct Vector {
 Vector operator*( const Number &s, const Vector &v );
 
 Vector operator*( const double &s, const Vector &v );
-
-
-#endif //CYLINDERS_VECTOR_H

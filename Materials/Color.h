@@ -1,9 +1,4 @@
-//
-// Created by kovi on 4/16/17.
-//
-
-#ifndef CYLINDERS_COLOR_H
-#define CYLINDERS_COLOR_H
+#pragma once
 
 struct Color {
     Number r, g, b;
@@ -80,7 +75,6 @@ struct Color {
         return *this - Number( doubleValue );
     }
 
-
     Number getMaxIntensity() {
         if( r >= g ){
             if( r >= b )
@@ -100,5 +94,3 @@ struct Color {
         return 0.21f * r + 0.72f * g + 0.07f * b;
     }
 };
-
-#endif //CYLINDERS_COLOR_H

@@ -1,9 +1,6 @@
-//
-// Created by kovi on 4/16/17.
-//
+#pragma once
 
-#ifndef CYLINDERS_RAY_H
-#define CYLINDERS_RAY_H
+#include <memory>
 
 #include "../MathUtils/Vector.h"
 
@@ -30,6 +27,3 @@ struct RayHit {
     ;
     Vector normal;
 };
-
-
-#endif //CYLINDERS_RAY_H

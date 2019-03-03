@@ -1,10 +1,4 @@
-//
-// Created by kovi on 4/16/17.
-//
-
-#ifndef CYLINDERS_AMBIENTLIGHT_H
-#define CYLINDERS_AMBIENTLIGHT_H
-
+#pragma once
 
 #include "Light.h"
 
@@ -31,5 +25,3 @@ public:
         return Number( 0 );
     }
 };
-
-#endif //CYLINDERS_AMBIENTLIGHT_H

@@ -1,9 +1,4 @@
-//
-// Created by kovi on 4/19/17.
-//
-
-#ifndef CYLINDERS_POINTLIGHT_H
-#define CYLINDERS_POINTLIGHT_H
+#pragma once
 
 #include "Light.h"
 
@@ -32,5 +27,3 @@ struct PointLight
         return ( position - targetPoint ).length();
     }
 };
-
-#endif //CYLINDERS_POINTLIGHT_H

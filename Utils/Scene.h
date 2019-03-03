@@ -2,11 +2,11 @@
 // Created by kovi on 4/16/17.
 //
 
-#ifndef CYLINDERS_SCENE_H
-#define CYLINDERS_SCENE_H
+#pragma once
 
 #include <random>
 #include <mutex>
+#include <memory>
 
 
 #include "../CameraUtils/Camera.h"
@@ -67,5 +67,3 @@ private:
     static void smoothTask( Scene *scene, Color *targetImage );
 
 };
-
-#endif //CYLINDERS_SCENE_H

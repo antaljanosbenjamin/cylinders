@@ -1,10 +1,4 @@
-//
-// Created by kovi on 4/16/17.
-//
-
-#ifndef CYLINDERS_LIGHT_H
-#define CYLINDERS_LIGHT_H
-
+#pragma once
 
 #include "../Materials/Color.h"
 #include "../MathUtils/Vector.h"
@@ -18,6 +12,3 @@ struct Light {
 
     virtual ~Light() {};
 };
-
-
-#endif //CYLINDERS_LIGHT_H

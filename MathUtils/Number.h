@@ -5,108 +5,241 @@
 #ifndef CYLINDERS_NUMBER_H
 #define CYLINDERS_NUMBER_H
 
-typedef float NumberValue;
+#include <cmath>
 
-struct Number {
+template <typename T>
+struct NumberBase
+{
 
-    NumberValue value;
+  private:
+    static constexpr T EPSZILON = 0.0025;
 
-    Number();
+  public:
+    T value;
 
-    explicit Number( const double &doubleValue );
+    NumberBase()
+        : value(T()) {}
 
-    // Number operators
-    bool operator==( const Number &other ) const;
+    explicit NumberBase(const T &value)
+        : value(value){};
 
-    bool operator!=( const Number &other ) const;
+    bool operator==(const NumberBase<T> &other) const
+    {
+        return (value < other.value + EPSZILON && value > other.value - EPSZILON);
+    }
 
-    bool operator>( const Number &other ) const;
+    bool operator!=(const NumberBase<T> &other) const
+    {
+        return !(*this == other);
+    }
 
-    bool operator<( const Number &other ) const;
+    bool operator>(const NumberBase<T> &other) const
+    {
+        return value >= other.value + EPSZILON;
+    }
 
-    bool operator>=( const Number &other ) const;
+    bool operator<(const NumberBase<T> &other) const
+    {
+        return value <= other.value - EPSZILON;
+    }
 
-    bool operator<=( const Number &other ) const;
+    bool operator>=(const NumberBase<T> &other) const
+    {
+        return !operator<(other);
+    }
 
-    Number operator+( const Number &other ) const;
+    bool operator<=(const NumberBase<T> &other) const
+    {
+        return !operator>(other);
+    }
 
-    Number operator-( const Number &other ) const;
+    NumberBase<T> operator+(const NumberBase<T> &other) const
+    {
+        return NumberBase<T>(value + other.value);
+    }
 
-    Number operator*( const Number &other ) const;
+    NumberBase<T> operator-(const NumberBase<T> &other) const
+    {
+        return NumberBase<T>(value - other.value);
+    }
 
-    Number operator/( const Number &other ) const;
+    NumberBase<T> operator*(const NumberBase<T> &other) const
+    {
+        return NumberBase<T>(value * other.value);
+    }
 
-    Number &operator+=( const Number &other );
+    NumberBase<T> operator/(const NumberBase<T> &other) const
+    {
+        return NumberBase<T>(value / other.value);
+    }
 
-    Number &operator-=( const Number &other );
+    NumberBase<T> &operator+=(const NumberBase<T> &other)
+    {
+        value += other.value;
+        return (*this);
+    }
 
-    Number &operator*=( const Number &other );
+    NumberBase<T> &operator-=(const NumberBase<T> &other)
+    {
+        value -= other.value;
+        return (*this);
+    }
 
-    Number &operator/=( const Number &other );
+    NumberBase<T> &operator*=(const NumberBase<T> &other)
+    {
+        value *= other.value;
+        return (*this);
+    }
 
-    Number operator-() const;
+    NumberBase<T> &operator/=(const NumberBase<T> &other)
+    {
+        value /= other.value;
+        return (*this);
+    }
+
+    NumberBase<T> operator-() const
+    {
+        return NumberBase<T>(-value);
+    }
 
     // double operators
-    bool operator==( const double &doubleValue ) const;
+    bool operator==(const T &tValue) const
+    {
+        return *this == NumberBase<T>(tValue);
+    }
 
-    bool operator!=( const double &doubleValue ) const;
+    bool operator!=(const T &tValue) const
+    {
+        return *this != NumberBase<T>(tValue);
+    }
 
-    bool operator>( const double &doubleValue ) const;
+    bool operator>(const T &tValue) const
+    {
+        return *this > NumberBase<T>(tValue);
+    }
 
-    bool operator<( const double &doubleValue ) const;
+    bool operator<(const T &tValue) const
+    {
+        return *this < NumberBase<T>(tValue);
+    }
 
-    bool operator>=( const double &doubleValue ) const;
+    bool operator>=(const T &tValue) const
+    {
+        return *this >= NumberBase<T>(tValue);
+    }
 
-    bool operator<=( const double &doubleValue ) const;
-    
-    Number operator+( const double &doubleValue ) const;
+    bool operator<=(const T &tValue) const
+    {
+        return *this <= NumberBase<T>(tValue);
+    }
 
-    Number operator-( const double &doubleValue ) const;
+    NumberBase<T> operator+(const T &tValue) const
+    {
+        return *this + NumberBase<T>(tValue);
+    }
 
-    Number operator*( const double &doubleValue ) const;
+    NumberBase<T> operator-(const T &tValue) const
+    {
+        return *this - NumberBase<T>(tValue);
+    }
 
-    Number operator/( const double &doubleValue ) const;
+    NumberBase<T> operator*(const T &tValue) const
+    {
+        return *this * NumberBase<T>(tValue);
+    }
 
-    Number &operator+=( const double &doubleValue );
+    NumberBase<T> operator/(const T &tValue) const
+    {
+        return *this / NumberBase<T>(tValue);
+    }
 
-    Number &operator-=( const double &doubleValue );
+    NumberBase<T> &operator+=(const T &tValue)
+    {
+        return *this += NumberBase<T>(tValue);
+    }
 
-    Number &operator*=( const double &doubleValue );
+    NumberBase<T> &operator-=(const T &tValue)
+    {
+        return *this -= NumberBase<T>(tValue);
+    }
 
-    Number &operator/=( const double &doubleValue );
+    NumberBase<T> &operator*=(const T &tValue)
+    {
+        return *this *= NumberBase<T>(tValue);
+    }
 
-    double operator=( const double &doubleValue );
+    NumberBase<T> &operator/=(const T &tValue)
+    {
+        return *this /= NumberBase<T>(tValue);
+    }
 
-    // Aritmetic function
-    static Number pow( const Number base, const Number exponent );
+    double operator=(const T &tValue)
+    {
+        *this = NumberBase<T>(tValue);
+        return tValue;
+    }
 
-    static Number pow( const Number base, const double exponent );
+    static NumberBase<T> pow(const NumberBase<T> &base, const NumberBase<T> &exponent)
+    {
+        return NumberBase<T>(std::pow(base.value, exponent.value));
+    }
 
-    static Number sqrt( const Number x );
+    static NumberBase<T> pow(const NumberBase<T> &base, const double exponent)
+    {
+        return NumberBase<T>(std::pow(base.value, exponent));
+    }
 
-    static Number abs( const Number x );
+    static NumberBase<T> sqrt(const NumberBase<T> &x)
+    {
+        return NumberBase<T>(std::sqrt(x.value));
+    }
 
-    static Number cos( const Number x );
+    static NumberBase<T> abs(const NumberBase<T> &x)
+    {
+        return NumberBase<T>(fabs(x.value));
+    }
 
-    static Number sin( const Number x );
+    static NumberBase<T> sin(const NumberBase<T> &x)
+    {
+        return NumberBase<T>(std::sin(x.value));
+    }
 
-#define nsqrt( X ) Number::sqrt( X )
-#define npow( BASE, EXPONENT ) Number::pow( BASE, EXPONENT )
-#define nabs( X ) Number::abs( X )
-#define ncos( X ) Number::cos( X )
-#define nsin( X ) Number::sin( X )
-
-
-private:
-    static constexpr NumberValue EPSZILON = 0.0025f;
+    static NumberBase<T> cos(const NumberBase<T> &x)
+    {
+        return NumberBase<T>(std::cos(x.value));
+    }
 };
-// double operators
-Number operator+( const double &lhs, const Number &rhs );
 
-Number operator-( const double &lhs, const Number &rhs );
+template <typename T, typename U>
+NumberBase<T> operator+(const U &lhs, const NumberBase<T> &rhs)
+{
+    return NumberBase<T>(lhs) + rhs;
+}
 
-Number operator*( const double &lhs, const Number &rhs );
+template <typename T, typename U>
+NumberBase<T> operator-(const U &lhs, const NumberBase<T> &rhs)
+{
+    return NumberBase<T>(lhs) - rhs;
+}
 
-Number operator/( const double &lhs, const Number &rhs );
+template <typename T, typename U>
+NumberBase<T> operator*(const U &lhs, const NumberBase<T> &rhs)
+{
+    return NumberBase<T>(lhs) * rhs;
+}
+
+template <typename T, typename U>
+NumberBase<T> operator/(const U &lhs, const NumberBase<T> &rhs)
+{
+    return NumberBase<T>(lhs) / rhs;
+}
+
+typedef NumberBase<float> Number;
+
+#define nsqrt(X) Number::sqrt(X)
+#define npow(BASE, EXPONENT) Number::pow(BASE, EXPONENT)
+#define nabs(X) Number::abs(X)
+#define ncos(X) Number::cos(X)
+#define nsin(X) Number::sin(X)
 
 #endif //CYLINDERS_NUMBER_H

@@ -1,9 +1,4 @@
-//
-// Created by kovi on 4/16/17.
-//
-
-#ifndef CYLINDERS_NUMBER_H
-#define CYLINDERS_NUMBER_H
+#pragma once
 
 #include <cmath>
 #include <type_traits>
@@ -242,5 +237,3 @@ typedef NumberBase<float> Number;
 #define nabs(X) Number::abs(X)
 #define ncos(X) Number::cos(X)
 #define nsin(X) Number::sin(X)
-
-#endif //CYLINDERS_NUMBER_H

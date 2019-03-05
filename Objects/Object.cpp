@@ -1,42 +1,44 @@
-//
-// Created by kovi on 4/16/17.
-//
-
 #include "Object.h"
 #include "../CameraUtils/Ray.h"
 #include "../Materials/Material.h"
 
-Object::Object( Material *material_init )
-        : transform(), inverseTransform(), scalem(), rotate(), shift(), inversScale(), inverseRotate(), inverseShift(), material( material_init ) {
+Object::Object(Material *material_init)
+    : transform(), inverseTransform(), scalem(), rotate(), shift(), inversScale(), inverseRotate(), inverseShift(), material(material_init)
+{
     clearTransform();
 }
 
-Object::~Object() {};
+Object::~Object(){};
 
-Ray Object::convertRayToObjectCoords( Ray &r ) {
-    return Ray( convertToObjectCoords( r.source ), convertToObjectCoords( r.source + r.direction ) - convertToObjectCoords( r.source ));
+Ray Object::convertRayToObjectCoords(Ray &r)
+{
+    return Ray(convertToObjectCoords(r.source), convertToObjectCoords(r.source + r.direction) - convertToObjectCoords(r.source));
 }
 
-ObjectPosition Object::convertPositionToWordCoords( ObjectPosition &op ) {
-    Vector origoInWorld = convertToWorldsCoords( op.origo );
-    return ObjectPosition( origoInWorld, convertToWorldsCoords( op.yAxis ) - origoInWorld );
+ObjectPosition Object::convertPositionToWordCoords(ObjectPosition &op)
+{
+    Vector origoInWorld = convertToWorldsCoords(op.origo);
+    return ObjectPosition(origoInWorld, convertToWorldsCoords(op.yAxis) - origoInWorld);
 }
 
-
-void Object::clearTransform() {
+void Object::clearTransform()
+{
     transform.loadIdentity();
     inverseTransform.loadIdentity();
 }
 
-Vector Object::convertToObjectCoords( Vector v ) {
+Vector Object::convertToObjectCoords(Vector v)
+{
     return v * inverseTransform;
 }
 
-Vector Object::convertToWorldsCoords( Vector v ) {
+Vector Object::convertToWorldsCoords(Vector v)
+{
     return v * transform;
 }
 
-void Object::setScale( Number scale ) {
+void Object::setScale(Number scale)
+{
     Matrix scaleMatrix;
     scaleMatrix.loadIdentity();
     scaleMatrix.matrix[0][0] = scaleMatrix.matrix[1][1] = scaleMatrix.matrix[2][2] = scale;
@@ -48,7 +50,8 @@ void Object::setScale( Number scale ) {
     inverseTransform = scaleMatrix * inverseTransform;
 }
 
-void Object::setScale( Number scaleX, Number scaleY, Number scaleZ ) {
+void Object::setScale(Number scaleX, Number scaleY, Number scaleZ)
+{
     Matrix scaleMatrix;
     scaleMatrix.loadIdentity();
     scaleMatrix.matrix[0][0] = scaleX;
@@ -61,9 +64,10 @@ void Object::setScale( Number scaleX, Number scaleY, Number scaleZ ) {
     inverseTransform = scaleMatrix * inverseTransform;
 }
 
-void Object::setRotateX( Number fi ) {
-    Number cosfi( ncos( fi ));
-    Number sinfi( nsin( fi ));
+void Object::setRotateX(Number fi)
+{
+    Number cosfi(ncos(fi));
+    Number sinfi(nsin(fi));
     Matrix rotateMatrix;
     rotateMatrix.loadIdentity();
     rotateMatrix.matrix[1][1] = rotateMatrix.matrix[2][2] = cosfi;
@@ -71,16 +75,17 @@ void Object::setRotateX( Number fi ) {
     rotateMatrix.matrix[1][2] = sinfi;
     transform = transform * rotateMatrix;
     rotate = rotateMatrix;
-    rotateMatrix.matrix[1][1] = rotateMatrix.matrix[2][2] = ncos( -fi );
+    rotateMatrix.matrix[1][1] = rotateMatrix.matrix[2][2] = ncos(-fi);
     rotateMatrix.matrix[1][2] = -sinfi;
     rotateMatrix.matrix[2][1] = sinfi;
     inverseRotate = rotateMatrix;
     inverseTransform = rotateMatrix * inverseTransform;
 }
 
-void Object::setRotateY( Number fi ) {
-    Number cosfi( ncos( fi ));
-    Number sinfi( nsin( fi ));
+void Object::setRotateY(Number fi)
+{
+    Number cosfi(ncos(fi));
+    Number sinfi(nsin(fi));
     Matrix rotateMatrix;
     rotateMatrix.loadIdentity();
     rotateMatrix.matrix[0][0] = rotateMatrix.matrix[2][2] = cosfi;
@@ -88,16 +93,17 @@ void Object::setRotateY( Number fi ) {
     rotateMatrix.matrix[2][0] = sinfi;
     transform = transform * rotateMatrix;
     rotate = rotateMatrix;
-    rotateMatrix.matrix[0][0] = rotateMatrix.matrix[2][2] = ncos( -fi );
+    rotateMatrix.matrix[0][0] = rotateMatrix.matrix[2][2] = ncos(-fi);
     rotateMatrix.matrix[2][0] = -sinfi;
     rotateMatrix.matrix[0][2] = sinfi;
     inverseRotate = rotateMatrix;
     inverseTransform = rotateMatrix * inverseTransform;
 }
 
-void Object::setRotateZ( Number fi ) {
-    Number cosfi( ncos( fi ));
-    Number sinfi( nsin( fi ));
+void Object::setRotateZ(Number fi)
+{
+    Number cosfi(ncos(fi));
+    Number sinfi(nsin(fi));
     Matrix rotateMatrix;
     rotateMatrix.loadIdentity();
     rotateMatrix.matrix[0][0] = rotateMatrix.matrix[1][1] = cosfi;
@@ -105,20 +111,22 @@ void Object::setRotateZ( Number fi ) {
     rotateMatrix.matrix[0][1] = sinfi;
     transform = transform * rotateMatrix;
     rotate = rotateMatrix;
-    rotateMatrix.matrix[0][0] = rotateMatrix.matrix[1][1] = ncos( -fi );
+    rotateMatrix.matrix[0][0] = rotateMatrix.matrix[1][1] = ncos(-fi);
     rotateMatrix.matrix[0][1] = -sinfi;
     rotateMatrix.matrix[1][0] = sinfi;
     inverseRotate = rotateMatrix;
     inverseTransform = rotateMatrix * inverseTransform;
 }
 
-void Object::setRotate( Number xfi, Number yfi, Number zfi ) {
-    setRotateZ( zfi );
-    setRotateY( yfi );
-    setRotateX( xfi );
+void Object::setRotate(Number xfi, Number yfi, Number zfi)
+{
+    setRotateZ(zfi);
+    setRotateY(yfi);
+    setRotateX(xfi);
 }
 
-void Object::setShift( Vector pos ) {
+void Object::setShift(Vector pos)
+{
     Matrix shiftMatrix;
     shiftMatrix.loadIdentity();
     shiftMatrix.matrix[3][0] = pos.getX();
@@ -134,8 +142,9 @@ void Object::setShift( Vector pos ) {
     inverseTransform = shiftMatrix * inverseTransform;
 }
 
-void Object::setNewBasesAndOrigo( Vector &newY, Vector &newOrigo ) {
-    Vector newX = newY.rotateByZ( Number( M_PI / 2 ) );
+void Object::setNewBasesAndOrigo(Vector &newY, Vector &newOrigo)
+{
+    Vector newX = newY.rotateByZ(Number(M_PI / 2));
     Vector newZ = newX % newY;
     newX = newX.getNormalized();
     newY = newY.getNormalized();
@@ -178,20 +187,24 @@ void Object::setNewBasesAndOrigo( Vector &newY, Vector &newOrigo ) {
     inverseTransform = newBaseMatrix * inverseTransform;
 }
 
-Color Object::getKD( const Vector &intersectPoint ){
+Color Object::getKD(const Vector &intersectPoint)
+{
     Vector ownIntersectPoint = convertToObjectCoords(intersectPoint);
-    return material->getKD( ownIntersectPoint );
+    return material->getKD(ownIntersectPoint);
 }
 
-Color Object::getKA( const Vector &intersectPoint ){
+Color Object::getKA(const Vector &intersectPoint)
+{
     Vector ownIntersectPoint = convertToObjectCoords(intersectPoint);
-    return material->getKA( ownIntersectPoint );
+    return material->getKA(ownIntersectPoint);
 }
 
-Color Object::getKS() {
+Color Object::getKS()
+{
     return material->getKS();
 }
 
-Number Object::getShininess() {
+Number Object::getShininess()
+{
     return material->getShineness();
 }

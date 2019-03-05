@@ -7,7 +7,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Release")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 endif (CMAKE_BUILD_TYPE STREQUAL "Release")
 
-set(CAMERA_UTILS_SOURCES CameraUtils/Ray.cpp CameraUtils/Ray.h CameraUtils/Camera.cpp CameraUtils/Camera.h)
+set(CAMERA_UTILS_SOURCES CameraUtils/Ray.h CameraUtils/Camera.cpp CameraUtils/Camera.h)
 set(MATH_UTILS_SOURCES MathUtils/Vector.cpp MathUtils/Vector.h MathUtils/Number.h MathUtils/Matrix.cpp MathUtils/Matrix.h)
 set(MATERIAL_SOURCES Materials/Color.h Materials/Material.cpp Materials/Material.h Materials/TableMaterial.cpp Materials/TableMaterial.h)
 set(OBJECT_SOURCES Objects/Object.cpp Objects/Object.h Objects/Plane.cpp Objects/Plane.h Objects/InfiniteCylinder.cpp Objects/InfiniteCylinder.h)

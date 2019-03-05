@@ -1,26 +1,23 @@
-//
-// Created by kovi on 4/16/17.
-//
-
-#ifndef CYLINDERS_INFINITCYLINDER_H
-#define CYLINDERS_INFINITCYLINDER_H
+#pragma once
 
 #include "Object.h"
 #include "../CameraUtils/Ray.h"
 
 class InfiniteCylinder
-        : public Object {
+    : public Object
+{
     Number radius;
 
-public:
-    InfiniteCylinder( Material *material_init, Number radius_init );
+  public:
+    InfiniteCylinder(Material *material_init, Number radius_init);
 
     virtual ~InfiniteCylinder();
 
-    // Világ koordinátákban lévő vektort kap
-    Vector getNormalAtPoint( Vector &intersectPoint );
+    /*
+    * @intersectPoint: a surface point in the world's coordinate system
+    * returns: the normal vector at the specified surface point
+    */
+    Vector getNormalAtPoint(Vector &intersectPoint);
 
-    Number intersect( Ray &r, RayHit &hit );
+    Number intersect(Ray &r, RayHit &hit);
 };
-
-#endif //CYLINDERS_INFINITCYLINDER_H

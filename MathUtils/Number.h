@@ -6,8 +6,9 @@
 #define CYLINDERS_NUMBER_H
 
 #include <cmath>
+#include <type_traits>
 
-template <typename T>
+template <typename T, typename = std::enable_if_t<std::is_floating_point_v<T> && !std::is_const_v<T>>>
 struct NumberBase
 {
 
@@ -102,7 +103,7 @@ struct NumberBase
         return NumberBase<T>(-value);
     }
 
-    // double operators
+    // raw operators
     bool operator==(const T &tValue) const
     {
         return *this == NumberBase<T>(tValue);
@@ -210,25 +211,25 @@ struct NumberBase
     }
 };
 
-template <typename T, typename U>
+template <typename T, typename U, typename = std::enable_if_t<std::is_floating_point_v<T> && !std::is_const_v<T> && std::is_arithmetic_v<U>>>
 NumberBase<T> operator+(const U &lhs, const NumberBase<T> &rhs)
 {
     return NumberBase<T>(lhs) + rhs;
 }
 
-template <typename T, typename U>
+template <typename T, typename U, typename = std::enable_if_t<std::is_floating_point_v<T> && !std::is_const_v<T> && std::is_arithmetic_v<U>>>
 NumberBase<T> operator-(const U &lhs, const NumberBase<T> &rhs)
 {
     return NumberBase<T>(lhs) - rhs;
 }
 
-template <typename T, typename U>
+template <typename T, typename U, typename = std::enable_if_t<std::is_floating_point_v<T> && !std::is_const_v<T> && std::is_arithmetic_v<U>>>
 NumberBase<T> operator*(const U &lhs, const NumberBase<T> &rhs)
 {
     return NumberBase<T>(lhs) * rhs;
 }
 
-template <typename T, typename U>
+template <typename T, typename U, typename = std::enable_if_t<std::is_floating_point_v<T> && !std::is_const_v<T> && std::is_arithmetic_v<U>>>
 NumberBase<T> operator/(const U &lhs, const NumberBase<T> &rhs)
 {
     return NumberBase<T>(lhs) / rhs;

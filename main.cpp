@@ -41,7 +41,7 @@ void getErrorInfo( unsigned int handle ) {
         int written;
         glGetShaderInfoLog( handle, logLen, &written, log );
         printf( "Shader log:\n%s", log );
-        delete log;
+        delete[] log;
     }
 }
 

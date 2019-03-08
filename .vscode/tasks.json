@@ -1,0 +1,82 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Generate debug",
+            "type": "shell",
+            "command": "cmake",
+            "linux": {
+                "args": [
+                    "-G",
+                    "Unix Makefiles",
+                    "-DCMAKE_BUILD_TYPE=Debug",
+                    ".."
+                ]
+            },
+            "windows": {
+                "args": [
+                    "-G",
+                    "Visual Studio 15 2017 Win64",
+                    "-DCMAKE_BUILD_TYPE=Debug",
+                    ".."
+                ]
+            },
+            "options": {
+                "cwd": "${workspaceRoot}/debug"
+            },
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Generate release",
+            "type": "shell",
+            "command": "cmake",
+            "linux": {
+                "args": [
+                    "-G",
+                    "Unix Makefiles",
+                    "-DCMAKE_BUILD_TYPE=Release",
+                    ".."
+                ]
+            },
+            "windows": {
+                "args": [
+                    "-G",
+                    "Visual Studio 15 2017 Win64",
+                    "-DCMAKE_BUILD_TYPE=Release",
+                    ".."
+                ]
+            },
+            "options": {
+                "cwd": "${workspaceRoot}/release"
+            },
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build linux debug",
+            "command": "make",
+            "args": [
+                "-j",
+                "8"
+            ],
+            "options": {
+                "cwd": "${workspaceRoot}/debug"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

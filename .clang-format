@@ -1,0 +1,27 @@
+---
+# We'll use defaults from the LLVM style, but with 4 columns indentation.
+BasedOnStyle: LLVM
+IndentWidth: 4
+---
+Language: Cpp
+ColumnLimit: 100
+BraceWrapping:
+  AfterClass: true
+  AfterStruct: true
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterUnion: true
+  AfterExternBlock: true
+  BeforeElse: false
+  SplitEmptyFunction: false
+
+IncludeCategories:
+  - Regex:           '<GL/glew.h>'
+    Priority:        1
+  - Regex:           '<GL/freeglut.h>'
+    Priority:        2
+  - Regex:           '<.*>'
+    Priority:        3
+  - Regex:           '".*"'
+    Priority:        4

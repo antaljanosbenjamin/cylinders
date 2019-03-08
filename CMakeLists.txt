@@ -1,21 +1,13 @@
 cmake_minimum_required(VERSION 3.5)
-project(cylinders)
+project(raytracer)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+set (CMAKE_CXX_STANDARD 17)
 
-if (CMAKE_BUILD_TYPE STREQUAL "Release")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
-endif (CMAKE_BUILD_TYPE STREQUAL "Release")
-
-set(CAMERA_UTILS_SOURCES CameraUtils/Ray.h CameraUtils/Camera.cpp CameraUtils/Camera.h)
-set(MATH_UTILS_SOURCES MathUtils/Vector.cpp MathUtils/Vector.h MathUtils/Number.h MathUtils/Matrix.cpp MathUtils/Matrix.h)
-set(MATERIAL_SOURCES Materials/Color.h Materials/Material.cpp Materials/Material.h Materials/TableMaterial.cpp Materials/TableMaterial.h)
-set(OBJECT_SOURCES Objects/Object.cpp Objects/Object.h Objects/Plane.cpp Objects/Plane.h Objects/InfiniteCylinder.cpp Objects/InfiniteCylinder.h)
-set(LIGHT_SOURCES Lights/Light.h Lights/AmbientLight.h Lights/PointLight.h)
-set(UTIL_SOURCES Utils/Scene.cpp Utils/Scene.h)
-
-set(SOURCE_FILES main.cpp ${UTIL_SOURCES} ${CAMERA_UTILS_SOURCES} ${MATH_UTILS_SOURCES} ${MATERIAL_SOURCES} ${OBJECT_SOURCES} ${LIGHT_SOURCES})
-add_executable(cylinders ${SOURCE_FILES})
+file(GLOB raytracer_SRC
+    "src/**/*.cpp"
+)
+message( STATUS  "${PROJECT_SOURCE_DIR}")
+add_executable(raytracer src/main.cpp ${raytracer_SRC})
 
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
@@ -36,6 +28,6 @@ if (NOT GLEW_FOUND)
     message(ERROR " GLEW not found!")
 endif (NOT GLEW_FOUND)
 
-include_directories(${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS})
+target_include_directories(raytracer PRIVATE ${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/inc)
 
-target_link_libraries(cylinders ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARY} Threads::Threads)
+target_link_libraries(raytracer ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARY} Threads::Threads)

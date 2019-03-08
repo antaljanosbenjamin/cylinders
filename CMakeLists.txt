@@ -6,7 +6,6 @@ set (CMAKE_CXX_STANDARD 17)
 file(GLOB raytracer_SRC
     "src/**/*.cpp"
 )
-message( STATUS  "${PROJECT_SOURCE_DIR}")
 add_executable(raytracer src/main.cpp ${raytracer_SRC})
 
 
